@@ -7,12 +7,13 @@ public class NodeOfTheTree {
     NodeOfTheTree right, left;
 
     // AVL
-    int balanceFactor;
+    int depthRight, depthLeft, depth;
 
     // default constructor
     NodeOfTheTree() {
         this.value = 0;
         this.right = this.left = null;
+        this.depthRight = this.depthLeft = this.depth;
     }
 
     // add a new node
