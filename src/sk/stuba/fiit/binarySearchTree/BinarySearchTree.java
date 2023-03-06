@@ -5,8 +5,7 @@
  * https://www.baeldung.com/java-binary-tree
  * https://www.youtube.com/watch?v=ytfEFJAhMgo
  * # implementing AVL tree to BSt
- * https://www.youtube.com/watch?v=n917xdxKSmo
- * https://www.youtube.com/watch?v=jDM6_TnYIqE
+ * https://www.educative.io/answers/how-to-convert-any-binary-search-tree-to-an-avl-tree
  */
 
 package sk.stuba.fiit.binarySearchTree;
@@ -31,7 +30,6 @@ public class BinarySearchTree {
     // TODO: debug
     // recursive method for checking values of nodes to insert a new value in the right place
     NodeOfTheTree insert(NodeOfTheTree actualNode, int newValue) {
-
         // if the current node is last, so we'll insert a new value in that position (like a new leaf)
         // if tree is empty
         if (actualNode == null) {
@@ -55,34 +53,6 @@ public class BinarySearchTree {
             }
         } else {
             return actualNode;
-        }
-
-        // AVL Tree
-        // calculate depth
-        actualNode.depth = (Math.max(depth(actualNode.left), depth(actualNode.right)) + 1);
-        // find balance o the tree
-        int middleRoot = getAVLRoot(actualNode);
-
-        // rotations of AVL
-        if ((middleRoot > 1) && (actualNode.value < actualNode.left.value)) {
-            return rightRotation(actualNode);
-        } else if ((middleRoot < -1) && (actualNode.value > actualNode.right.value)) {
-            return leftRotation(actualNode);
-        } else if ((middleRoot > 1) && (actualNode.value > actualNode.left.value)) {
-            return leftRightRotation(actualNode);
-        } else if ((middleRoot < -1) && (actualNode.value < actualNode.right.value)) {
-            return rightLeftRotation(actualNode);
-        }
-
-        // recalculate depth
-        actualNode.depth = (Math.max(depth(actualNode.left), depth(actualNode.right)) + 1);
-
-        // TODO: ????
-        // update root pointer
-        if (actualNode.left != null && actualNode.depthLeft > actualNode.depthRight) {
-            actualNode = rightRotation(actualNode);
-        } else if (actualNode.right != null && actualNode.depthRight > actualNode.depthLeft) {
-            actualNode = leftRotation(actualNode);
         }
 
         return actualNode;
@@ -243,16 +213,14 @@ public class BinarySearchTree {
         if (actualNode == null || (actualNode.right == null && actualNode.left == null)) {
             return 0;
         } else {
-            actualNode.depthLeft = depth(actualNode.left);
-            actualNode.depthRight = depth(actualNode.right);
+            int depthLeft = depth(actualNode.left);
+            int depthRight = depth(actualNode.right);
 
-            if (actualNode.depthLeft > actualNode.depthRight) {
-                actualNode.depth = actualNode.depthLeft = (1 + actualNode.depthLeft);
-                return actualNode.depthLeft;
+            if (depthLeft > depthRight) {
+                return (1 + depthLeft);
             } else {
                 // + 1 because of the current node of the tree
-                actualNode.depth = actualNode.depthRight = (1 + actualNode.depthRight);
-                return actualNode.depthRight;
+                return (1 + depthRight);
             }
         }
     }
@@ -268,125 +236,6 @@ public class BinarySearchTree {
      * The program picks from the array a middle value and divides values to the left and right subtrees.
      */
 
-    // ##########################################
-    // ### find value in the middle as a root ###
-    // ##########################################
-
-    int getAVLRoot(NodeOfTheTree actualNode) {
-        if (actualNode == null) {
-            return 0;
-        }
-
-        return (depth(actualNode.left) - depth(actualNode.right));
-    }
-
-    // #################
-    // ### rotations ###
-    // #################
-
-    NodeOfTheTree leftRotation(NodeOfTheTree actualNode) {
-
-        NodeOfTheTree newRoot;
-
-        if (actualNode == null) {
-            return null;
-        }
-
-        if (actualNode.depthRight != 0 || actualNode.depthLeft != 0) {
-
-            if (actualNode.depthRight > actualNode.depthLeft) {
-                // the newRoot will be a right child of actualNode
-                newRoot = actualNode.right;
-                // the right child of actualNode will be the left child
-                actualNode.right = newRoot.left;
-                // the left child of newRoot is ActualNode
-                newRoot.left = actualNode;
-
-                // update heights
-                actualNode.depth = (Math.max(depth(actualNode.left), depth(actualNode.right)) + 1);
-                newRoot.depth = (Math.max(depth(newRoot.left), depth(newRoot.right)) + 1);
-
-                return newRoot;
-            }
-        }
-
-        return null;
-    }
-
-    NodeOfTheTree rightRotation(NodeOfTheTree actualNode) {
-
-        NodeOfTheTree newRoot;
-
-        if (actualNode == null) {
-            return null;
-        }
-
-        if (actualNode.depthRight != 0 || actualNode.depthLeft != 0) {
-
-            if (actualNode.depthRight < actualNode.depthLeft) {
-                // the newRoot will be a left child of actualNode
-                newRoot = actualNode.left;
-                // the left child of actualNode will be the right child
-                actualNode.left = newRoot.right;
-                // the right child of newRoot is ActualNode
-                newRoot.right = actualNode;
-
-                // update heights
-                actualNode.depth = (Math.max(depth(actualNode.left), depth(actualNode.right)) + 1);
-                newRoot.depth = (Math.max(depth(newRoot.left), depth(newRoot.right)) + 1);
-
-                return newRoot;
-            }
-        }
-
-        return null;
-    }
-
-    NodeOfTheTree leftRightRotation(NodeOfTheTree actualNode) {
-
-        NodeOfTheTree newNode;
-
-        if (actualNode == null) {
-            return null;
-        }
-
-        newNode = actualNode;
-        depth(newNode.left);
-
-        if (actualNode.depthRight != 0 || actualNode.depthLeft != 0) {
-
-            if ((newNode.depthRight < newNode.depthLeft) && (actualNode.depthRight > actualNode.depthLeft)) {
-                actualNode.left = leftRotation(actualNode.left);
-                return rightRotation(newNode);
-            }
-        }
-
-        return null;
-    }
-
-    NodeOfTheTree rightLeftRotation(NodeOfTheTree actualNode) {
-
-        NodeOfTheTree newNode;
-
-        if (actualNode == null) {
-            return null;
-        }
-
-        newNode = actualNode;
-        depth(newNode.right);
-
-        if (actualNode.depthRight != 0 || actualNode.depthLeft != 0) {
-
-            if ((newNode.depthRight > newNode.depthLeft) && (actualNode.depthRight < actualNode.depthLeft)) {
-                actualNode.right = leftRotation(actualNode.right);
-                return leftRotation(newNode);
-            }
-        }
-
-        return null;
-    }
-
-    // ######***********************************************#######
     // ###################
     // ### count nodes ###
     // ###################
