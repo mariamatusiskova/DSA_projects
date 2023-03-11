@@ -1,23 +1,28 @@
 package sk.stuba.fiit.binarySearchTree;
 
+import sk.stuba.fiit.program.Data;
+
 // Node for storing values and keeping a reference to each child
 public class NodeOfTheTree {
 
-    public int value;
-    NodeOfTheTree right, left;
+    public Data data;
+    public NodeOfTheTree right;
+    public NodeOfTheTree left;
 
     // AVL
-    int balanceFactor;
+    public static int height;
 
     // default constructor
     NodeOfTheTree() {
-        this.value = 0;
+        this.data = null;
         this.right = this.left = null;
+        this.height = 0;
     }
 
     // add a new node
-    public NodeOfTheTree(int value) {
-        this.value = value;
+    public NodeOfTheTree(Data data) {
+        this.data = data;
         this.right = this.left = null;
+        this.height = 0;
     }
 }
