@@ -27,7 +27,7 @@ public class Testing {
         return sb.toString();
     }
 
-    public BinarySearchTree createBinarySearchTree() {
+    public void createBinarySearchTree() {
 
         BinarySearchTree bst = new BinarySearchTree();
         Traverse tr = new Traverse();
@@ -60,7 +60,36 @@ public class Testing {
 
         avl.callHeight();
 
-        return bst;
+        System.out.println();
+        System.out.println("*************** AVL ***************");
+        System.out.println();
+
+        avl.callInsert(new Data(generateData()));
+        Data specificAVL = new Data(generateData());
+        avl.callInsert(specificAVL);
+        avl.callInsert(new Data(generateData()));
+        Data toDeleteAVL = new Data(generateData());
+        avl.callInsert(toDeleteAVL);
+        avl.callInsert(new Data(generateData()));
+        avl.callInsert(new Data(generateData()));
+        avl.callInsert(new Data(generateData()));
+
+        avl.callSearch(specific);
+
+        avl.callHeight();
+
+        tr.callInorder();
+        tr.callPreorder();
+        tr.callPostorder();
+
+        avl.callDelete(toDeleteAVL);
+        avl.callSearch(toDeleteAVL);
+
+        tr.callInorder();
+        tr.callPreorder();
+        tr.callPostorder();
+
+        avl.callHeight();
     }
 
     public static void main(String[] args) {

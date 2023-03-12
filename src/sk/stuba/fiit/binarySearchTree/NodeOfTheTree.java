@@ -10,7 +10,7 @@ public class NodeOfTheTree {
     public NodeOfTheTree left;
 
     // AVL
-    public static int height;
+    public int height;
 
     // default constructor
     NodeOfTheTree() {
