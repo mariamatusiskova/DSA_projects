@@ -14,7 +14,7 @@ import sk.stuba.fiit.program.Data;
 
 public class BinarySearchTree {
 
-    public static NodeOfTheTree root;
+    public NodeOfTheTree root;
 
     // default constructor
     public BinarySearchTree() {
@@ -84,7 +84,7 @@ public class BinarySearchTree {
         if (actualNode.data.compareTo(deleteData) == 0) {
             return null;
         } else if (actualNode.data.compareTo(deleteData) > 0) {
-                actualNode.left = delete(actualNode.left, deleteData);
+            actualNode.left = delete(actualNode.left, deleteData);
         } else if (actualNode.data.compareTo(deleteData) < 0) {
             if (actualNode.right == null) {
                 return null;

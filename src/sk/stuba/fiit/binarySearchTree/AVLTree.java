@@ -29,7 +29,7 @@ public class AVLTree extends BinarySearchTree {
     }
 
     public int callHeight() {
-        int value = height(bst.root);
+        int value = height(root);
         System.out.println("height: " + value);
         return value;
     }
@@ -135,22 +135,4 @@ public class AVLTree extends BinarySearchTree {
         updateHeight(actualNode);
         return rebalance(actualNode);
     }
-
-
-
-    // ###################
-    // ### count nodes ###
-    // ###################
-
-    int countNodes(NodeOfTheTree actualNode) {
-
-        if (actualNode == null) {
-            return 0;
-        } else {
-            return (1 + countNodes(actualNode.left) + countNodes(actualNode.right));
-        }
-    }
-
-
-
 }
