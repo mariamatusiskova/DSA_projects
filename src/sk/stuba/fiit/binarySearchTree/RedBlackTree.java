@@ -8,7 +8,9 @@ package sk.stuba.fiit.binarySearchTree;
 
 import sk.stuba.fiit.program.Data;
 
-public class RedBlackTree extends BinarySearchTree {
+public class RedBlackTree {
+
+    NodeOfTheTree root;
 
     private final boolean RED = false;
     private final boolean BLACK = true;
@@ -76,18 +78,22 @@ public class RedBlackTree extends BinarySearchTree {
     }
 
     void insertRBT(NodeOfTheTree actualNode, Data newData) {
-        actualNode = super.insert(actualNode, newData);
 
         NodeOfTheTree uncle;
 
         while (actualNode != null && actualNode.parent != null && actualNode.parent.color == RED) {
+
             if (actualNode.parent == actualNode.parent.parent.left) {
                 uncle = actualNode.parent.parent.right;
                 // parent and uncle are red --> need to recolor
                 if (uncle != null && uncle.color == RED) {
+                    // parent will be black
                     actualNode.parent.color = BLACK;
+                    // uncle will be black
                     uncle.color = BLACK;
+                    // grandparent will be red
                     actualNode.parent.parent.color = RED;
+                    // set node as a parent
                     actualNode = actualNode.parent.parent;
                 } else {
                     // triangle, uncle is black, parent is red (an inserted value (left child) will be red --> rotation)
@@ -130,8 +136,12 @@ public class RedBlackTree extends BinarySearchTree {
         root.color = BLACK;
     }
 
+    public void callInsert(Data newData) {
+        // sending a root because that's the beginning of the tree
+        insertRBT(root, newData);
+    }
+
      void deleteRBT(NodeOfTheTree actualNode, Data deleteData) {
-         actualNode = super.delete(actualNode, deleteData);
 
          NodeOfTheTree uncle;
 
@@ -200,5 +210,10 @@ public class RedBlackTree extends BinarySearchTree {
          // case 0
          actualNode.color = BLACK;
      }
+
+    public void callDelete(Data deleteData) {
+        // sending a root because that's the beginning of the tree
+        deleteRBT(root, deleteData);
+    }
 
 }

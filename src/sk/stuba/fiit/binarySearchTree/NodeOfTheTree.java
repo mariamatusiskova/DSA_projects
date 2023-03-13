@@ -24,7 +24,8 @@ public class NodeOfTheTree {
         this.data = null;
         this.right = this.left = null;
         this.height = 0;
-        this.color = true;
+        this.color = false;
+        this.parent = null;
     }
 
     // add a new node
@@ -32,6 +33,7 @@ public class NodeOfTheTree {
         this.data = data;
         this.right = this.left = null;
         this.height = 0;
-        this.color = true;
+        this.color = false;
+        this.parent = null;
     }
 }

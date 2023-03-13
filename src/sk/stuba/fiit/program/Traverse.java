@@ -22,10 +22,10 @@ public class Traverse {
                 for (int i = 0; i < space; i++) {
                     System.out.print("\t\t\t");
                 }
-                System.out.println("|-------------- " + actualNode.data.value);
+                System.out.println("|-------------- " + actualNode.data.value + " | " + actualNode.data.number);
             } else {
                 // root
-                System.out.println("INORDER ROOT: " + actualNode.data.value);
+                System.out.println("INORDER ROOT: " + actualNode.data.value + " | " + actualNode.data.number);
             }
 
             inorder(actualNode.right, space + 1);
@@ -49,10 +49,10 @@ public class Traverse {
                 for (int i = 0; i < space; i++) {
                     System.out.print("\t\t\t");
                 }
-                System.out.println("|-------------- " + actualNode.data.value);
+                System.out.println("|-------------- " + actualNode.data.value + " | " + actualNode.data.number);
             } else {
                 // root
-                System.out.println("PREORDER ROOT: " + actualNode.data.value);
+                System.out.println("PREORDER ROOT: " + actualNode.data.value + " | " + actualNode.data.number);
             }
 
             preorder(actualNode.left, space + 1);
@@ -78,12 +78,12 @@ public class Traverse {
 
             if (space != 0) {
                 for (int i = 0; i < space; i++) {
-                    System.out.print("\t\t\t");
+                    System.out.print("\t\t\t\t");
                 }
-                System.out.println("|-------------- " + actualNode.data.value);
+                System.out.println("|-------------- " + actualNode.data.value + " | " + actualNode.data.number);
             } else {
                 // root
-                System.out.println("POSTORDER ROOT: " + actualNode.data.value);
+                System.out.println("POSTORDER ROOT: " + actualNode.data.value + " | " + actualNode.data.number);
             }
         }
     }

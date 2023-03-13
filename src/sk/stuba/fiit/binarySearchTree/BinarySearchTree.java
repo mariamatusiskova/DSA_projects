@@ -14,7 +14,7 @@ import sk.stuba.fiit.program.Data;
 
 public class BinarySearchTree {
 
-    public NodeOfTheTree root;
+    public static NodeOfTheTree root;
 
     // default constructor
     public BinarySearchTree() {
