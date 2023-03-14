@@ -206,7 +206,7 @@ public class RedBlackTree extends BinarySearchTree{
              transplant(actualNode, actualNode.left);
          // two children
          } else {
-             copyOfDeleteNode.data = findMinimum(actualNode.right);
+             copyOfDeleteNode = findMinimum(actualNode.right);
              deleteColor = copyOfDeleteNode.color;
              childNode = copyOfDeleteNode.right;
 

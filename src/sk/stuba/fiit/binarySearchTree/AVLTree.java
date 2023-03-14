@@ -14,20 +14,25 @@ public class AVLTree extends BinarySearchTree {
     // calculate depth of the binary search tree
     int height(NodeOfTheTree actualNode) {
 
-        // if the tree is empty, the depth is 0
-        if (actualNode == null || (actualNode.right == null && actualNode.left == null)) {
-            return 0;
-        } else {
-            int heightLeft = height(actualNode.left);
-            int heightRight = height(actualNode.right);
-
-            if (heightLeft > heightRight) {
-                return (1 + heightLeft);
-            } else {
-                // + 1 because of the current node of the tree
-                return (1 + heightRight);
-            }
+        if (actualNode == null) {
+            return -1;
         }
+        return actualNode.height;
+
+//        // if the tree is empty, the depth is 0
+//        if (actualNode == null || (actualNode.right == null && actualNode.left == null)) {
+//            return 0;
+//        } else {
+//            int heightLeft = height(actualNode.left);
+//            int heightRight = height(actualNode.right);
+//
+//            if (heightLeft > heightRight) {
+//                return (1 + heightLeft);
+//            } else {
+//                // + 1 because of the current node of the tree
+//                return (1 + heightRight);
+//            }
+//        }
     }
 
     public int callHeight() {
@@ -44,45 +49,52 @@ public class AVLTree extends BinarySearchTree {
         return height(node.right) - height(node.left);
     }
 
-    // TODO: check first if condition
     NodeOfTheTree rightRotation(NodeOfTheTree actualNode) {
 
-        if (actualNode == null || actualNode.left == null) {
+        if (actualNode.left != null) {
+
+            // new parent
+            NodeOfTheTree newParent = actualNode.left;
+
+            // the left child will be changed from the original parent
+            actualNode.left = newParent.right;
+
+            if (newParent.right != null) {
+                // original parent will be right child of the new parent
+                newParent.right = actualNode;
+            }
+
+            updateHeight(actualNode);
+            updateHeight(newParent);
+
+            return newParent;
+        } else {
             return actualNode;
         }
-
-        // new parent
-        NodeOfTheTree newParent = actualNode.left;
-
-        // the left child will be changed from the original parent
-        actualNode.left = newParent.right;
-        // original parent will be right child of the new parent
-        newParent.right = actualNode;
-
-        updateHeight(actualNode);
-        updateHeight(newParent);
-
-        return newParent;
     }
 
     NodeOfTheTree leftRotation(NodeOfTheTree actualNode) {
 
-        if (actualNode == null || actualNode.right == null) {
+        if (actualNode.right != null) {
+
+            // new parent
+            NodeOfTheTree newParent = actualNode.right;
+
+            // the right child will be changed from the original parent
+            actualNode.right = newParent.left;
+
+            if (newParent.left != null) {
+                // original parent will be right child of the new parent
+                newParent.left = actualNode;
+            }
+
+            updateHeight(actualNode);
+            updateHeight(newParent);
+
+            return newParent;
+        } else {
             return actualNode;
         }
-
-        // new parent
-        NodeOfTheTree newParent = actualNode.right;
-
-        // the right child will be changed from the original parent
-        actualNode.right = newParent.left;
-        // original parent will be right child of the new parent
-        newParent.left = actualNode;
-
-        updateHeight(actualNode);
-        updateHeight(newParent);
-
-        return newParent;
     }
 
     NodeOfTheTree rightLeftRotation(NodeOfTheTree actualNode) {
@@ -122,6 +134,10 @@ public class AVLTree extends BinarySearchTree {
 
     NodeOfTheTree insert(NodeOfTheTree actualNode, Data newData) {
         actualNode = super.insert(actualNode, newData);
+
+        if (actualNode.data == newData) {
+            return actualNode;
+        }
 
         updateHeight(actualNode);
         return rebalance(actualNode);

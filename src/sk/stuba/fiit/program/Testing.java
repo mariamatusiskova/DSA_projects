@@ -42,9 +42,9 @@ public class Testing {
         Data specific = new Data(generateData(), generateRandomNumber());
         bst.callInsert(specific);
         bst.callInsert(new Data(generateData(), generateRandomNumber()));
-        bst.callInsert(new Data(generateData(), generateRandomNumber()));
-        bst.callInsert(new Data(generateData(), generateRandomNumber()));
-        bst.callInsert(new Data(generateData(), generateRandomNumber()));
+        for (int i = 0; i < 3; i++) {
+            bst.callInsert(new Data(generateData(), generateRandomNumber()));
+        }
 
         bst.callSearch(specific);
 

@@ -30,9 +30,7 @@ public class BinarySearchTree {
         }
 
         // no duplicates
-        if (actualNode.data.compareTo(newData) == 0) {
-            return null;
-        } else if (actualNode.data.compareTo(newData) > 0) {
+        if (actualNode.data.compareTo(newData) > 0) {
                 actualNode.left = insert(actualNode.left, newData);
         } else if (actualNode.data.compareTo(newData) < 0) {
                 actualNode.right = insert(actualNode.right, newData);
@@ -81,16 +79,12 @@ public class BinarySearchTree {
             return null;
         }
 
-        if (actualNode.data.compareTo(deleteData) == 0) {
-            return null;
+        if (actualNode.data.compareTo(deleteData) == 0 || actualNode.left == null && actualNode.right == null) {
+            actualNode = null;
         } else if (actualNode.data.compareTo(deleteData) > 0) {
             actualNode.left = delete(actualNode.left, deleteData);
         } else if (actualNode.data.compareTo(deleteData) < 0) {
-            if (actualNode.right == null) {
-                return null;
-            } else {
-                actualNode.right = delete(actualNode.right, deleteData);
-            }
+            actualNode.right = delete(actualNode.right, deleteData);
         } else {
 
             // one child
@@ -100,7 +94,9 @@ public class BinarySearchTree {
                 return actualNode.left;
 
             // two children
-            actualNode.data = findMinimum(actualNode.right);
+            NodeOfTheTree copyNode = findMinimum(actualNode.right);
+
+            actualNode.data = copyNode.data;
 
             actualNode.right = delete(actualNode.right, actualNode.data);
         }
@@ -108,13 +104,13 @@ public class BinarySearchTree {
         return actualNode;
     }
 
-    Data findMinimum(NodeOfTheTree actualNode) {
+    NodeOfTheTree findMinimum(NodeOfTheTree actualNode) {
 
         while (actualNode.left != null) {
             actualNode = actualNode.left;
         }
 
-        return actualNode.data;
+        return actualNode;
     }
 
     public void callDelete(Data deleteData) {
