@@ -2,6 +2,8 @@
 // https://www.happycoders.eu/algorithms/red-black-tree-java/
 // https://www.javadevjournal.com/data-structure/red-black-tree/
 // https://algorithmtutor.com/Data-Structures/Tree/Red-Black-Trees/
+// https://www.codesdope.com/course/data-structures-red-black-trees-insertion/
+// https://www.codesdope.com/course/data-structures-red-black-trees-deletion/
 // https://www.youtube.com/watch?v=5IBxA-bZZH8
 
 package sk.stuba.fiit.binarySearchTree;
@@ -81,7 +83,7 @@ public class RedBlackTree extends BinarySearchTree{
 
     void insertRBT(NodeOfTheTree actualNode, Data newData) {
 
-        // TODO: do sth, can be dangerous
+        // store data into node
         NodeOfTheTree addNode = new NodeOfTheTree(newData);
 
         NodeOfTheTree parent = null;
@@ -161,10 +163,6 @@ public class RedBlackTree extends BinarySearchTree{
                 }
             }
 
-//            if (actualNode == root || actualNode.parent == null) {
-//                break;
-//            }
-
         }
         // the root is always black (rule of RBT)
         root.color = BLACK;
@@ -175,77 +173,132 @@ public class RedBlackTree extends BinarySearchTree{
         insertRBT(root, newData);
     }
 
+    // replace the node --> new parent
+    void transplant(NodeOfTheTree node, NodeOfTheTree nodeChild) {
+
+        if (node.parent == null) {
+            root = nodeChild;
+        } else if (node == node.parent.left) {
+            node.parent.left = nodeChild;
+        } else {
+            node.parent.right = nodeChild;
+        }
+
+        if (nodeChild != null) {
+            nodeChild.parent = node.parent;
+        }
+    }
+
      void deleteRBT(NodeOfTheTree actualNode, Data deleteData) {
 
-         NodeOfTheTree uncle;
+         // parent node
+         NodeOfTheTree copyOfDeleteNode = actualNode;
+         NodeOfTheTree childNode;
+         boolean deleteColor = copyOfDeleteNode.color;
 
-         while (actualNode != root && actualNode.color == BLACK) {
-            if (actualNode == actualNode.parent.left) {
-                uncle = actualNode.parent.right;
-                // case 3.1
-                if (uncle.color == RED) {
-                    uncle.color = BLACK;
-                    actualNode.parent.color = RED;
-                    leftRotation(actualNode.parent);
-                    uncle = actualNode.parent.right;
-                }
+         // no children or only right child
+         if (actualNode.left == null) {
+             childNode = actualNode.right;
+             transplant(actualNode, actualNode.right);
+         // only left child
+         } else if (actualNode.right == null) {
+             childNode = actualNode.left;
+             transplant(actualNode, actualNode.left);
+         // two children
+         } else {
+             copyOfDeleteNode.data = findMinimum(actualNode.right);
+             deleteColor = copyOfDeleteNode.color;
+             childNode = copyOfDeleteNode.right;
 
-                // case 3.2
-                if (uncle.left.color == BLACK & uncle.right.color == BLACK) {
-                    uncle.color = RED;
-                    actualNode = actualNode.parent;
-                } else {
-                    // case 3.3
-                    if (uncle.right.color == BLACK) {
-                        uncle.left.color = BLACK;
-                        uncle.color = RED;
-                        rightRotation(uncle);
-                        uncle = actualNode.parent.right;
-                    }
-                    // case 3.4
-                    uncle.color = actualNode.parent.color;
-                    actualNode.parent.color = BLACK;
-                    uncle.right.color = BLACK;
-                    leftRotation(actualNode.parent);
-                    actualNode = root;
-                }
-            } else {
-                uncle = actualNode.parent.left;
-                // case 3.1
-                if (uncle.color == RED) {
-                    uncle.color = BLACK;
-                    actualNode.parent.color = RED;
-                    rightRotation(actualNode.parent);
-                    uncle = actualNode.parent.left;
-                }
+             // if it is child of deleteNode
+             if (copyOfDeleteNode.parent == actualNode) {
+                 childNode.parent = copyOfDeleteNode;
+             } else {
+                 transplant(copyOfDeleteNode, copyOfDeleteNode.right);
+                 copyOfDeleteNode.right = actualNode.right;
+                 copyOfDeleteNode.right.parent =  copyOfDeleteNode;
+             }
 
-                // case 3.2
-                if (uncle.right.color == BLACK & uncle.left.color == BLACK) {
-                    uncle.color = RED;
-                    actualNode = actualNode.parent;
-                } else {
-                    // case 3.3
-                    if (uncle.left.color == BLACK) {
-                        uncle.right.color = BLACK;
-                        uncle.color = RED;
-                        leftRotation(uncle);
-                        uncle = actualNode.parent.left;
-                    }
-                    // case 3.4
-                    uncle.color = actualNode.parent.color;
-                    actualNode.parent.color = BLACK;
-                    uncle.left.color = BLACK;
-                    rightRotation(actualNode.parent);
-                    actualNode = root;
-                }
-            }
+             transplant(actualNode, copyOfDeleteNode);
+             copyOfDeleteNode.left = actualNode.left;
+             copyOfDeleteNode.left.parent = copyOfDeleteNode;
+             copyOfDeleteNode.color = actualNode.color;
          }
 
-         // case 0
-         actualNode.color = BLACK;
+         if (deleteColor == BLACK) {
+
+             // delete fixup childNode
+             NodeOfTheTree uncle;
+
+             while (childNode != root && childNode.color == BLACK) {
+
+                 if (childNode == childNode.parent.left) {
+                     uncle = childNode.parent.right;
+                     // case 3.1
+                     if (uncle.color == RED) {
+                         uncle.color = BLACK;
+                         childNode.parent.color = RED;
+                         leftRotation(childNode.parent);
+                         uncle = childNode.parent.right;
+                     }
+
+                     // case 3.2
+                     if (uncle.left.color == BLACK & uncle.right.color == BLACK) {
+                         uncle.color = RED;
+                         childNode = childNode.parent;
+                     } else {
+                         // case 3.3
+                         if (uncle.right.color == BLACK) {
+                             uncle.left.color = BLACK;
+                             uncle.color = RED;
+                             rightRotation(uncle);
+                             uncle = childNode.parent.right;
+                         }
+                         // case 3.4
+                         uncle.color = childNode.parent.color;
+                         childNode.parent.color = BLACK;
+                         uncle.right.color = BLACK;
+                         leftRotation(childNode.parent);
+                         childNode = root;
+                     }
+                 } else {
+                     uncle = childNode.parent.left;
+                     // case 3.1
+                     if (uncle.color == RED) {
+                         uncle.color = BLACK;
+                         childNode.parent.color = RED;
+                         rightRotation(childNode.parent);
+                         uncle = childNode.parent.left;
+                     }
+
+                     // case 3.2
+                     if (uncle.right.color == BLACK & uncle.left.color == BLACK) {
+                         uncle.color = RED;
+                         childNode = childNode.parent;
+                     } else {
+                         // case 3.3
+                         if (uncle.left.color == BLACK) {
+                             uncle.right.color = BLACK;
+                             uncle.color = RED;
+                             leftRotation(uncle);
+                             uncle = childNode.parent.left;
+                         }
+                         // case 3.4
+                         uncle.color = childNode.parent.color;
+                         childNode.parent.color = BLACK;
+                         uncle.left.color = BLACK;
+                         rightRotation(childNode.parent);
+                         childNode = root;
+                     }
+                 }
+             }
+
+             // case 0
+             childNode.color = BLACK;
+         }
      }
 
-    public void callDelete(Data deleteData) {
+    public void callDelete(NodeOfTheTree actualNode, Data deleteData) {
         // sending a root because that's the beginning of the tree
         deleteRBT(root, deleteData);
     }

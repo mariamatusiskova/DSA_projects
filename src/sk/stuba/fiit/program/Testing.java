@@ -42,8 +42,6 @@ public class Testing {
         Data specific = new Data(generateData(), generateRandomNumber());
         bst.callInsert(specific);
         bst.callInsert(new Data(generateData(), generateRandomNumber()));
-        Data toDelete = new Data(generateData(), generateRandomNumber());
-        bst.callInsert(toDelete);
         bst.callInsert(new Data(generateData(), generateRandomNumber()));
         bst.callInsert(new Data(generateData(), generateRandomNumber()));
         bst.callInsert(new Data(generateData(), generateRandomNumber()));
@@ -54,8 +52,8 @@ public class Testing {
         tr.callPreorder();
         tr.callPostorder();
 
-        bst.callDelete(toDelete);
-        bst.callSearch(toDelete);
+        bst.callDelete(specific);
+        bst.callSearch(specific);
 
         tr.callInorder();
         tr.callPreorder();
@@ -71,8 +69,7 @@ public class Testing {
         Data specificAVL = new Data(generateData(), generateRandomNumber());
         avl.callInsert(specificAVL);
         avl.callInsert(new Data(generateData(), generateRandomNumber()));
-        Data toDeleteAVL = new Data(generateData(), generateRandomNumber());
-        avl.callInsert(toDeleteAVL);
+        avl.callInsert(specificAVL);
         avl.callInsert(new Data(generateData(), generateRandomNumber()));
         avl.callInsert(new Data(generateData(), generateRandomNumber()));
         avl.callInsert(new Data(generateData(), generateRandomNumber()));
@@ -85,8 +82,8 @@ public class Testing {
         tr.callPreorder();
         tr.callPostorder();
 
-        avl.callDelete(toDeleteAVL);
-        avl.callSearch(toDeleteAVL);
+        avl.callDelete(specificAVL);
+        avl.callSearch(specificAVL);
 
         tr.callInorder();
         tr.callPreorder();
@@ -104,8 +101,7 @@ public class Testing {
         Data specificRBT = new Data(generateData(), generateRandomNumber());
         rbt.callInsert(specificRBT);
         rbt.callInsert(new Data(generateData(), generateRandomNumber()));
-        Data toDeleteRBT = new Data(generateData(), generateRandomNumber());
-        rbt.callInsert(toDeleteRBT);
+        rbt.callInsert(specificRBT);
         rbt.callInsert(new Data(generateData(), generateRandomNumber()));
         rbt.callInsert(new Data(generateData(), generateRandomNumber()));
         rbt.callInsert(new Data(generateData(), generateRandomNumber()));
@@ -116,8 +112,8 @@ public class Testing {
         tr.callPreorder();
         tr.callPostorder();
 
-        rbt.callDelete(toDeleteRBT);
-        rbt.callSearch(toDeleteRBT);
+        rbt.callDelete(specificRBT);
+        rbt.callSearch(specificRBT);
 
         tr.callInorder();
         tr.callPreorder();
