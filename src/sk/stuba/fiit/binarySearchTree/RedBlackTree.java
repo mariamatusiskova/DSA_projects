@@ -8,9 +8,11 @@ package sk.stuba.fiit.binarySearchTree;
 
 import sk.stuba.fiit.program.Data;
 
-public class RedBlackTree {
+public class RedBlackTree extends BinarySearchTree{
 
-    NodeOfTheTree root;
+    public RedBlackTree() {
+        this.root = null;
+    }
 
     private final boolean RED = false;
     private final boolean BLACK = true;
@@ -79,9 +81,35 @@ public class RedBlackTree {
 
     void insertRBT(NodeOfTheTree actualNode, Data newData) {
 
+        NodeOfTheTree parent = null;
+
+        while (actualNode != null) {
+            parent = actualNode;
+            // no duplicates
+            if (actualNode.data.compareTo(newData) > 0) {
+                actualNode = actualNode.left;
+            } else {
+                actualNode = actualNode.right;
+            }
+        }
+
+        // insert new node
+        NodeOfTheTree addNode = new NodeOfTheTree(newData);
+        addNode.color = RED;
+
+        if (parent == null) {
+            root = addNode;
+        } else if (parent.data.compareTo(newData) < 0) {
+            parent.left = addNode;
+        } else {
+            parent.right = addNode;
+        }
+
+        addNode.parent = parent;
+
         NodeOfTheTree uncle;
 
-        while (actualNode != null && actualNode.parent != null && actualNode.parent.color == RED) {
+        while (actualNode != null && actualNode.parent.color == RED) {
 
             if (actualNode.parent == actualNode.parent.parent.left) {
                 uncle = actualNode.parent.parent.right;

@@ -7,7 +7,9 @@ import sk.stuba.fiit.program.Data;
 
 public class AVLTree extends BinarySearchTree {
 
-    BinarySearchTree bst = new BinarySearchTree();
+    public AVLTree() {
+        this.root = null;
+    }
 
     // calculate depth of the binary search tree
     int height(NodeOfTheTree actualNode) {

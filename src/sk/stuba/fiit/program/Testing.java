@@ -37,8 +37,6 @@ public class Testing {
 
         BinarySearchTree bst = new BinarySearchTree();
         Traverse tr = new Traverse();
-        AVLTree avl = new AVLTree();
-        RedBlackTree rbt = new RedBlackTree();
 
         bst.callInsert(new Data(generateData(), generateRandomNumber()));
         Data specific = new Data(generateData(), generateRandomNumber());
@@ -52,8 +50,6 @@ public class Testing {
 
         bst.callSearch(specific);
 
-        avl.callHeight();
-
         tr.callInorder();
         tr.callPreorder();
         tr.callPostorder();
@@ -65,7 +61,7 @@ public class Testing {
         tr.callPreorder();
         tr.callPostorder();
 
-        avl.callHeight();
+        AVLTree avl = new AVLTree();
 
         System.out.println();
         System.out.println("*************** AVL ***************");
@@ -97,6 +93,8 @@ public class Testing {
         tr.callPostorder();
 
         avl.callHeight();
+
+        RedBlackTree rbt = new RedBlackTree();
 
         System.out.println();
         System.out.println("*************** RBT ***************");
