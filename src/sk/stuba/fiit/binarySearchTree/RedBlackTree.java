@@ -85,7 +85,7 @@ public class RedBlackTree extends BinarySearchTree{
 
         while (actualNode != null) {
             parent = actualNode;
-            // no duplicates
+
             if (actualNode.data.compareTo(newData) > 0) {
                 actualNode = actualNode.left;
             } else {
@@ -96,10 +96,11 @@ public class RedBlackTree extends BinarySearchTree{
         // insert new node
         NodeOfTheTree addNode = new NodeOfTheTree(newData);
         addNode.color = RED;
+        addNode.parent = parent;
 
         if (parent == null) {
             root = addNode;
-        } else if (parent.data.compareTo(newData) < 0) {
+        } else if (parent.data.compareTo(addNode.data) > 0) {
             parent.left = addNode;
         } else {
             parent.right = addNode;
