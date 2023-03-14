@@ -212,6 +212,10 @@ public class RedBlackTree extends BinarySearchTree{
             }
         }
 
+        if (deleteNode == null) {
+            return;
+        }
+
         parentNode = deleteNode;
         deleteColor = parentNode.color;
 
