@@ -3,7 +3,6 @@ package sk.stuba.fiit.program;
 
 import sk.stuba.fiit.binarySearchTree.AVLTree;
 import sk.stuba.fiit.binarySearchTree.BinarySearchTree;
-import sk.stuba.fiit.binarySearchTree.NodeOfTheTree;
 import sk.stuba.fiit.binarySearchTree.RedBlackTree;
 
 import java.util.Random;

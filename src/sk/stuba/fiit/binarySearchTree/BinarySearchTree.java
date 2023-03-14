@@ -68,7 +68,7 @@ public class BinarySearchTree {
     public boolean callSearch(Data searchData) {
         // sending a root because that's the beginning of the tree
         boolean searchedValue = search(root, searchData);
-        System.out.println("expected value: " + searchedValue + " | " + searchData.value);
+        System.out.println("expected value: " + searchedValue + " | " + searchData.value + " | " + searchData.key);
         return searchedValue;
     }
 
