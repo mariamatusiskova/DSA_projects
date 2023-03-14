@@ -81,12 +81,15 @@ public class RedBlackTree extends BinarySearchTree{
 
     void insertRBT(NodeOfTheTree actualNode, Data newData) {
 
+        // TODO: do sth, can be dangerous
+        NodeOfTheTree addNode = new NodeOfTheTree(newData);
+
         NodeOfTheTree parent = null;
 
         while (actualNode != null) {
             parent = actualNode;
 
-            if (actualNode.data.compareTo(newData) > 0) {
+            if (actualNode.data.compareTo(addNode.data) > 0) {
                 actualNode = actualNode.left;
             } else {
                 actualNode = actualNode.right;
@@ -94,10 +97,10 @@ public class RedBlackTree extends BinarySearchTree{
         }
 
         // insert new node
-        NodeOfTheTree addNode = new NodeOfTheTree(newData);
         addNode.color = RED;
         addNode.parent = parent;
 
+        // if added root is root
         if (parent == null) {
             root = addNode;
         } else if (parent.data.compareTo(addNode.data) > 0) {
@@ -106,59 +109,61 @@ public class RedBlackTree extends BinarySearchTree{
             parent.right = addNode;
         }
 
-        addNode.parent = parent;
+        addNode.right = null;
+        addNode.left = null;
 
+        // fix red and black properties after insert
         NodeOfTheTree uncle;
 
-        while (actualNode != null && actualNode.parent.color == RED) {
+        while (addNode != null && addNode.parent != null && addNode.parent.color == RED) {
 
-            if (actualNode.parent == actualNode.parent.parent.left) {
-                uncle = actualNode.parent.parent.right;
+            if (addNode.parent == addNode.parent.parent.left) {
+                uncle = addNode.parent.parent.right;
                 // parent and uncle are red --> need to recolor
                 if (uncle != null && uncle.color == RED) {
                     // parent will be black
-                    actualNode.parent.color = BLACK;
+                    addNode.parent.color = BLACK;
                     // uncle will be black
                     uncle.color = BLACK;
                     // grandparent will be red
-                    actualNode.parent.parent.color = RED;
+                    addNode.parent.parent.color = RED;
                     // set node as a parent
-                    actualNode = actualNode.parent.parent;
+                    addNode = addNode.parent.parent;
                 } else {
                     // triangle, uncle is black, parent is red (an inserted value (left child) will be red --> rotation)
-                    if (actualNode == actualNode.parent.right) {
-                        actualNode = actualNode.parent;
-                        leftRotation(actualNode);
+                    if (addNode == addNode.parent.right) {
+                        addNode = addNode.parent;
+                        leftRotation(addNode);
                     }
                     // line, uncle is black, parent is red (an inserted value (right child) will be red --> rotation)
-                    actualNode.parent.color = BLACK;
-                    actualNode.parent.parent.color = RED;
-                    rightRotation(actualNode.parent.parent);
+                    addNode.parent.color = BLACK;
+                    addNode.parent.parent.color = RED;
+                    rightRotation(addNode.parent.parent);
                 }
             } else {
-                uncle = actualNode.parent.parent.left;
+                uncle = addNode.parent.parent.left;
                 // parent and uncle are red --> need to recolor
                 if (uncle != null && uncle.color == RED) {
-                    actualNode.parent.color = BLACK;
+                    addNode.parent.color = BLACK;
                     uncle.color = BLACK;
-                    actualNode.parent.parent.color = RED;
-                    actualNode = actualNode.parent.parent;
+                    addNode.parent.parent.color = RED;
+                    addNode = addNode.parent.parent;
                 } else {
                     // triangle, uncle is black, parent is red (an inserted value (left child) will be red --> rotation)
-                    if (actualNode == actualNode.parent.left) {
-                        actualNode = actualNode.parent;
-                        rightRotation(actualNode);
+                    if (addNode == addNode.parent.left) {
+                        addNode = addNode.parent;
+                        rightRotation(addNode);
                     }
                     // line, uncle is black, parent is red (an inserted value (right child) will be red --> rotation)
-                    actualNode.parent.color = BLACK;
-                    actualNode.parent.parent.color = RED;
-                    leftRotation(actualNode.parent.parent);
+                    addNode.parent.color = BLACK;
+                    addNode.parent.parent.color = RED;
+                    leftRotation(addNode.parent.parent);
                 }
             }
 
-            if (actualNode == root || actualNode.parent == null) {
-                break;
-            }
+//            if (actualNode == root || actualNode.parent == null) {
+//                break;
+//            }
 
         }
         // the root is always black (rule of RBT)
