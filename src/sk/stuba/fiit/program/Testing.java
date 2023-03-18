@@ -4,6 +4,7 @@ package sk.stuba.fiit.program;
 import sk.stuba.fiit.binarySearchTree.AVLTree;
 import sk.stuba.fiit.binarySearchTree.BinarySearchTree;
 import sk.stuba.fiit.binarySearchTree.RedBlackTree;
+//import sk.stuba.fiit.binarySearchTree.SplayTree;
 
 import java.util.Random;
 
@@ -47,16 +48,16 @@ public class Testing {
 
         bst.callSearch(specific);
 
-        tr.callInorder();
-        tr.callPreorder();
-        tr.callPostorder();
+        tr.callInorder(bst);
+        tr.callPreorder(bst);
+        tr.callPostorder(bst);
 
         bst.callDelete(specific);
         bst.callSearch(specific);
 
-        tr.callInorder();
-        tr.callPreorder();
-        tr.callPostorder();
+        tr.callInorder(bst);
+        tr.callPreorder(bst);
+        tr.callPostorder(bst);
 
         AVLTree avl = new AVLTree();
 
@@ -77,16 +78,16 @@ public class Testing {
 
         avl.callHeight();
 
-        tr.callInorder();
-        tr.callPreorder();
-        tr.callPostorder();
+        tr.callInorder(avl);
+        tr.callPreorder(avl);
+        tr.callPostorder(avl);
 
         avl.callDelete(specificAVL);
         avl.callSearch(specificAVL);
 
-        tr.callInorder();
-        tr.callPreorder();
-        tr.callPostorder();
+        tr.callInorder(avl);
+        tr.callPreorder(avl);
+        tr.callPostorder(avl);
 
         avl.callHeight();
 
@@ -107,16 +108,44 @@ public class Testing {
 
         rbt.callSearch(specificRBT);
 
-        tr.callInorder();
-        tr.callPreorder();
-        tr.callPostorder();
+         tr.callInorder(rbt);
+//        tr.callPreorder(rbt);
+//        tr.callPostorder(rbt);
 
         rbt.callDelete(specificRBT);
         rbt.callSearch(specificRBT);
 
-        tr.callInorder();
-        tr.callPreorder();
-        tr.callPostorder();
+          tr.callInorder(rbt);
+//        tr.callPreorder(rbt);
+//        tr.callPostorder(rbt);
+
+//        SplayTree st = new SplayTree();
+
+//        System.out.println();
+//        System.out.println("*************** SplayTree ***************");
+//        System.out.println();
+//
+//        st.callInsert(new Data(generateData(), generateRandomNumber()));
+//        Data specificST = new Data(generateData(), generateRandomNumber());
+//        st.callInsert(specificST);
+//        st.callInsert(new Data(generateData(), generateRandomNumber()));
+//        st.callInsert(specificST);
+//        st.callInsert(new Data(generateData(), generateRandomNumber()));
+//        st.callInsert(new Data(generateData(), generateRandomNumber()));
+//        st.callInsert(new Data(generateData(), generateRandomNumber()));
+//
+//        st.callSearch(specificST);
+//
+//        tr.callInorder(st);
+//        tr.callPreorder(st);
+//        tr.callPostorder(st);
+//
+//        st.callDelete(specificST);
+//        st.callSearch(specificST);
+//
+//        tr.callInorder(st);
+//        tr.callPreorder(st);
+//        tr.callPostorder(st);
     }
 
     public static void main(String[] args) {

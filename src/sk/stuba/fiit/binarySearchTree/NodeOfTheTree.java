@@ -14,10 +14,10 @@ public class NodeOfTheTree {
     // AVL Tree
     public int height;
 
-    // Red-Black Tree
-    // we need a parent node to balance the tree because the colours of the tree depend on the parent
-    NodeOfTheTree parent;
-    boolean color;
+    // Splay Tree (There was attempt of Red-Black Tree)
+    // we need a parent node to balance the tree (because the colours of the tree depend on the parent)
+    public NodeOfTheTree parent;
+    public boolean color;
 
     // default constructor
     NodeOfTheTree() {

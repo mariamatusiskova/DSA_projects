@@ -18,23 +18,25 @@ public class Traverse {
 
             inorder(actualNode.left, space + 1);
 
-            if (space != 0) {
-                for (int i = 0; i < space; i++) {
-                    System.out.print("\t\t\t");
-                }
-                System.out.println("|-------------- " + actualNode.data.value + " | " + actualNode.data.number);
-            } else {
-                // root
-                System.out.println("INORDER ROOT: " + actualNode.data.value + " | " + actualNode.data.number);
-            }
+//            if (space != 0) {
+//                for (int i = 0; i < space; i++) {
+//                    System.out.print("\t\t\t");
+//                }
+//                System.out.println("|-------------- " + actualNode.data.value + " | " + actualNode.data.number);
+//            } else {
+//                // root
+//                System.out.println("INORDER ROOT: " + actualNode.data.value + " | " + actualNode.data.number);
+//            }
+
+            System.out.println(actualNode.data.value + " | " + actualNode.data.number);
 
             inorder(actualNode.right, space + 1);
         }
     }
 
-    public void callInorder() {
+    public void callInorder(BinarySearchTree tree) {
         System.out.println();
-        inorder(bst.root, 0);
+        inorder(tree.root, 0);
         System.out.println();
         System.out.println();
     }
@@ -60,9 +62,9 @@ public class Traverse {
         }
     }
 
-    public void callPreorder() {
+    public void callPreorder(BinarySearchTree tree) {
         System.out.println();
-        preorder(bst.root, 0);
+        preorder(tree.root, 0);
         System.out.println();
         System.out.println();
     }
@@ -88,9 +90,9 @@ public class Traverse {
         }
     }
 
-    public void callPostorder() {
+    public void callPostorder(BinarySearchTree tree) {
         System.out.println();
-        postorder(bst.root, 0);
+        postorder(tree.root, 0);
         System.out.println();
         System.out.println();
     }
