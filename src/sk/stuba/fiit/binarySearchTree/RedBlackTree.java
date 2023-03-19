@@ -114,11 +114,11 @@ public class RedBlackTree extends BinarySearchTree {
         NodeOfTheTree uncle = null;
 
         // grandparent.left = uncle
-        if (grandparent.left == parent) {
-            uncle = grandparent.right;
-        // grandparent.left = uncle
-        } else if (grandparent.right == parent) {
-            uncle = grandparent.left;
+        if (parent.parent.left == parent) {
+            uncle = parent.parent.right;
+        // grandparent.right = uncle
+        } else if (parent.parent.right == parent) {
+            uncle = parent.parent.left;
         }
 
         // case if uncle is red
@@ -215,7 +215,7 @@ public class RedBlackTree extends BinarySearchTree {
         boolean deleteColor;
 
         // search node to delete
-        while (actualNode != null && actualNode.data.compareTo(deleteData) == 0) {
+        while (actualNode != null && actualNode.data != deleteData) {
 
             if (actualNode.data.compareTo(deleteData) > 0) {
                 actualNode = actualNode.left;
@@ -254,7 +254,7 @@ public class RedBlackTree extends BinarySearchTree {
 
             // if it is child of deleteNode
             if (successorNode.left != null) {
-                transplant(actualNode.parent, successorNode, successorNode.left);
+                transplant(successorNode.parent, successorNode, successorNode.left);
                 deleteNode = successorNode.left;
             } else if (successorNode.right != null) {
                 transplant(successorNode.parent, successorNode, successorNode.right);
