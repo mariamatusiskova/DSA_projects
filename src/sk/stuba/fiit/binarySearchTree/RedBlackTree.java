@@ -331,6 +331,7 @@ public class RedBlackTree extends BinarySearchTree {
                 rightRotation(deleteNode.parent);
             }
 
+            // uncle update
             if (deleteNode == deleteNode.parent.left) {
                 uncle = deleteNode.parent.right;
             } else if (deleteNode == deleteNode.parent.right) {
@@ -340,60 +341,44 @@ public class RedBlackTree extends BinarySearchTree {
             }
         }
 
-        // Cases 3+4: Black uncle with two black children
-        if (isBlack(uncle.left) && isBlack(uncle.right)) {
+        // black uncle and two black children
+        if ((uncle.left == null || uncle.left.color == BLACK) && (uncle.right == null || uncle.right.color == BLACK)) {
             uncle.color = RED;
 
-            // Case 3: Black uncle with two black children + red parent
+            // case: red parent
             if (deleteNode.parent.color == RED) {
                 deleteNode.parent.color = BLACK;
-            }
-
-            // Case 4: Black uncle with two black children + black parent
-            else {
+            // case: black parent
+            } else {
                 deleteFixup(deleteNode.parent);
             }
-        }
-
-        // Case 5+6: Black uncle with at least one red child
-        else {
-            handleBlackSiblingWithAtLeastOneRedChild(deleteNode, uncle);
-        }
-    }
-
-    private void handleBlackSiblingWithAtLeastOneRedChild(NodeOfTheTree node, NodeOfTheTree sibling) {
-        boolean nodeIsLeftChild = node == node.parent.left;
-
-        // Case 5: Black sibling with at least one red child + "outer nephew" is black
-        // --> Recolor sibling and its child, and rotate around sibling
-        if (nodeIsLeftChild && isBlack(sibling.right)) {
-            sibling.left.color = BLACK;
-            sibling.color = RED;
-            rightRotation(sibling);
-            sibling = node.parent.right;
-        } else if (!nodeIsLeftChild && isBlack(sibling.left)) {
-            sibling.right.color = BLACK;
-            sibling.color = RED;
-            leftRotation(sibling);
-            sibling = node.parent.left;
-        }
-
-        // Fall-through to case 6...
-
-        // Case 6: Black sibling with at least one red child + "outer nephew" is red
-        // --> Recolor sibling + parent + sibling's child, and rotate around parent
-        sibling.color = node.parent.color;
-        node.parent.color = BLACK;
-        if (nodeIsLeftChild) {
-            sibling.right.color = BLACK;
-            leftRotation(node.parent);
+        // black uncle and one or more red children
         } else {
-            sibling.left.color = BLACK;
-            rightRotation(node.parent);
-        }
-    }
 
-    private boolean isBlack(NodeOfTheTree node) {
-        return node == null || node.color == BLACK;
+            if ((deleteNode == deleteNode.parent.left) && (uncle.right == null || uncle.right.color == BLACK)) {
+
+                uncle.left.color = BLACK;
+                uncle.color = RED;
+                rightRotation(uncle);
+                uncle = deleteNode.parent.right;
+            } else if (!(deleteNode == deleteNode.parent.left) && (uncle.left == null || uncle.left.color == BLACK)) {
+
+                uncle.right.color = BLACK;
+                uncle.color = RED;
+                leftRotation(uncle);
+                uncle = deleteNode.parent.left;
+            }
+
+            uncle.color = deleteNode.parent.color;
+            deleteNode.parent.color = BLACK;
+
+            if (deleteNode == deleteNode.parent.left) {
+                uncle.right.color = BLACK;
+                leftRotation(deleteNode.parent);
+            } else {
+                uncle.left.color = BLACK;
+                rightRotation(deleteNode.parent);
+            }
+        }
     }
 }
