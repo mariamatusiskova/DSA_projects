@@ -1,5 +1,6 @@
 // Source:
 // https://www.happycoders.eu/algorithms/red-black-tree-java/
+// this tree is mainly from the source I gave, I tried many pseudocode and algorithms, but only this one works for me
 
 package sk.stuba.fiit.binarySearchTree;
 import sk.stuba.fiit.program.Data;
@@ -356,13 +357,11 @@ public class RedBlackTree extends BinarySearchTree {
         } else {
 
             if ((deleteNode == deleteNode.parent.left) && (uncle.right == null || uncle.right.color == BLACK)) {
-
                 uncle.left.color = BLACK;
                 uncle.color = RED;
                 rightRotation(uncle);
                 uncle = deleteNode.parent.right;
             } else if (!(deleteNode == deleteNode.parent.left) && (uncle.left == null || uncle.left.color == BLACK)) {
-
                 uncle.right.color = BLACK;
                 uncle.color = RED;
                 leftRotation(uncle);
