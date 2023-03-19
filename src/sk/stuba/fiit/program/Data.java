@@ -7,7 +7,7 @@ import java.util.Objects;
 
 public class Data implements Comparable<Data> {
 
-    int number;
+    public int number;
 
     // random String
     public String value;

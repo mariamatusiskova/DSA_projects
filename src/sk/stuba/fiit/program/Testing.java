@@ -35,6 +35,10 @@ public class Testing {
 
     public void createBinarySearchTree() {
 
+        System.out.println();
+        System.out.println("*************** BST ***************");
+        System.out.println();
+
         BinarySearchTree bst = new BinarySearchTree();
         Traverse tr = new Traverse();
 
@@ -109,43 +113,17 @@ public class Testing {
         rbt.callSearch(specificRBT);
 
          tr.callInorder(rbt);
-//        tr.callPreorder(rbt);
-//        tr.callPostorder(rbt);
+        tr.callPreorder(rbt);
+        tr.callPostorder(rbt);
 
         rbt.callDelete(specificRBT);
         rbt.callSearch(specificRBT);
 
           tr.callInorder(rbt);
-//        tr.callPreorder(rbt);
-//        tr.callPostorder(rbt);
+        tr.callPreorder(rbt);
+        tr.callPostorder(rbt);
 
-//        SplayTree st = new SplayTree();
 
-//        System.out.println();
-//        System.out.println("*************** SplayTree ***************");
-//        System.out.println();
-//
-//        st.callInsert(new Data(generateData(), generateRandomNumber()));
-//        Data specificST = new Data(generateData(), generateRandomNumber());
-//        st.callInsert(specificST);
-//        st.callInsert(new Data(generateData(), generateRandomNumber()));
-//        st.callInsert(specificST);
-//        st.callInsert(new Data(generateData(), generateRandomNumber()));
-//        st.callInsert(new Data(generateData(), generateRandomNumber()));
-//        st.callInsert(new Data(generateData(), generateRandomNumber()));
-//
-//        st.callSearch(specificST);
-//
-//        tr.callInorder(st);
-//        tr.callPreorder(st);
-//        tr.callPostorder(st);
-//
-//        st.callDelete(specificST);
-//        st.callSearch(specificST);
-//
-//        tr.callInorder(st);
-//        tr.callPreorder(st);
-//        tr.callPostorder(st);
     }
 
     public static void main(String[] args) {

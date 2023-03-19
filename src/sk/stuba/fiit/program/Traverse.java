@@ -18,17 +18,17 @@ public class Traverse {
 
             inorder(actualNode.left, space + 1);
 
-//            if (space != 0) {
-//                for (int i = 0; i < space; i++) {
-//                    System.out.print("\t\t\t");
-//                }
-//                System.out.println("|-------------- " + actualNode.data.value + " | " + actualNode.data.number);
-//            } else {
-//                // root
-//                System.out.println("INORDER ROOT: " + actualNode.data.value + " | " + actualNode.data.number);
-//            }
+            if (space != 0) {
+                for (int i = 0; i < space; i++) {
+                    System.out.print("\t\t\t");
+                }
+                System.out.println("|-------------- " + actualNode.data.value + " | " + actualNode.data.number);
+            } else {
+                // root
+                System.out.println("INORDER ROOT: " + actualNode.data.value + " | " + actualNode.data.number);
+            }
 
-            System.out.println(actualNode.data.value + " | " + actualNode.data.number);
+          //  System.out.println(actualNode.data.value + " | " + actualNode.data.number);
 
             inorder(actualNode.right, space + 1);
         }
