@@ -1,17 +1,11 @@
-// Source:
-// https://www.happycoders.eu/algorithms/red-black-tree-java/
-
 package sk.stuba.fiit.binarySearchTree;
 import sk.stuba.fiit.program.Data;
 
-public class RedBlackTree extends BinarySearchTree {
+public class RedBlackTreeCopy extends BinarySearchTree {
 
     private final boolean RED = false;
     private final boolean BLACK = true;
 
-    public RedBlackTree() {
-        this.root = null;
-    }
 
     private void rightRotation(NodeOfTheTree actualNode) {
 
@@ -63,181 +57,148 @@ public class RedBlackTree extends BinarySearchTree {
 
     public void callInsert(Data newData) {
         // sending a root because that's the beginning of the tree
-        insertRBT(root, newData);
+        insertNode(newData);
     }
 
-    public void insertRBT(NodeOfTheTree actualNode, Data newData) {
-
-        // store data into node
-        NodeOfTheTree newNode = new NodeOfTheTree(newData);
+    public void insertNode(Data newData) {
+        NodeOfTheTree node = this.root;
         NodeOfTheTree parent = null;
 
-        // if tree is not empty
-        while (actualNode != null) {
-            parent = actualNode;
-            if (actualNode.data.compareTo(newData) > 0) {
-                actualNode = actualNode.left;
-            } else if (actualNode.data.compareTo(newData) < 0) {
-                actualNode = actualNode.right;
+        // Traverse the tree to the left or right depending on the key
+        while (node != null) {
+            parent = node;
+            if (newData.compareTo(node.data) < 0) {
+                node = node.left;
+            } else if (newData.compareTo(node.data) > 0) {
+                node = node.right;
             } else {
-               return;
+                return;
             }
         }
 
+        // Insert new node
+        NodeOfTheTree newNode = new NodeOfTheTree(newData);
         newNode.color = RED;
-
-        // if added node is a root
         if (parent == null) {
             root = newNode;
-        } else if (parent.data.compareTo(newNode.data) > 0) {
+        } else if (newNode.data.compareTo(parent.data) < 0) {
             parent.left = newNode;
         } else {
             parent.right = newNode;
         }
         newNode.parent = parent;
 
-        insertFixup(newNode);
+        fixRedBlackPropertiesAfterInsert(newNode);
     }
 
-    // recursive method
-    private void insertFixup(NodeOfTheTree newNode) {
+    private void fixRedBlackPropertiesAfterInsert(NodeOfTheTree node) {
+        NodeOfTheTree parent = node.parent;
 
-        NodeOfTheTree parent = newNode.parent;
-
-        // check if parent is null, pointer is in the end of the tree
+        // Case 1: Parent is null, we've reached the root, the end of the recursion
         if (parent == null) {
-            // newNode is a root
-            newNode.color = BLACK;
+            // Uncomment the following line if you want to enforce black roots (rule 2):
+            // node.color = BLACK;
             return;
         }
 
-        // case when parent is already black
+        // Parent is black --> nothing to do
         if (parent.color == BLACK) {
             return;
         }
 
-        // case when parent is red:
+        // From here on, parent is red
         NodeOfTheTree grandparent = parent.parent;
 
-        // if grandparent is null then again parent is a root
+        // Case 2:
+        // Not having a grandparent means that parent is the root. If we enforce black roots
+        // (rule 2), grandparent will never be null, and the following if-then block can be
+        // removed.
         if (grandparent == null) {
+            // As this method is only called on red nodes (either on newly inserted ones - or -
+            // recursively on red grandparents), all we have to do is to recolor the root black.
             parent.color = BLACK;
             return;
         }
 
-        // check if uncle is black or nor
-        NodeOfTheTree uncle = null;
+        // Get the uncle (may be null/nil, in which case its color is BLACK)
+        NodeOfTheTree uncle = getUncle(parent);
 
-        // grandparent.left = uncle
-        if (grandparent.left == parent) {
-            uncle = grandparent.right;
-        // grandparent.left = uncle
-        } else if (grandparent.right == parent) {
-            uncle = grandparent.left;
-        }
-
-        // case if uncle is red
+        // Case 3: Uncle is red -> recolor parent, grandparent and uncle
         if (uncle != null && uncle.color == RED) {
-
-            /* before:                  after:
-                      G = B                         G = R
-                       / \                           / \
-                  U = R   P = R                  U = B  P = B
-             */
-
             parent.color = BLACK;
             grandparent.color = RED;
             uncle.color = BLACK;
 
-            // grandparent is red, but we don't know if it is a root or not and the rule is, that root have to be black
-            insertFixup(grandparent);
-        /*
-            condition:
-              G
-             / \
-            P
-         */
-        } else if (parent == grandparent.left) {
+            // Call recursively for grandparent, which is now red.
+            // It might be root or have a red parent, in which case we need to fix more...
+            fixRedBlackPropertiesAfterInsert(grandparent);
+        }
 
-            /*
-                condition:
-                  G
-                 / \
-                P
-               / \
-                  NewNode
-             */
-            if (newNode == parent.right) {
-
+        // Parent is left child of grandparent
+        else if (parent == grandparent.left) {
+            // Case 4a: Uncle is black and node is left->right "inner child" of its grandparent
+            if (node == parent.right) {
                 leftRotation(parent);
-                parent = newNode;
-                 /*
-                     after:
-                              G
-                             / \
-                        NewNode
-                           / \
-                          P
-                */
+
+                // Let "parent" point to the new root node of the rotated sub-tree.
+                // It will be recolored in the next step, which we're going to fall-through to.
+                parent = node;
             }
 
-            /*
-                case:
-                          G
-                         / \
-                    NewNode
-                       / \
-                     P
-             */
-
+            // Case 5a: Uncle is black and node is left->left "outer child" of its grandparent
             rightRotation(grandparent);
-              /*
-                 after:
-                        NewNode
-                         / \
-                        G   P
-                */
 
+            // Recolor original parent and grandparent
             parent.color = BLACK;
             grandparent.color = RED;
-        /*
-            condition:
-              G
-             / \
-                P
-         */
-        } else {
-            // symmetrical
-            if (newNode == parent.left) {
+        }
+
+        // Parent is right child of grandparent
+        else {
+            // Case 4b: Uncle is black and node is right->left "inner child" of its grandparent
+            if (node == parent.left) {
                 rightRotation(parent);
 
-                parent = newNode;
+                // Let "parent" point to the new root node of the rotated sub-tree.
+                // It will be recolored in the next step, which we're going to fall-through to.
+                parent = node;
             }
 
+            // Case 5b: Uncle is black and node is right->right "outer child" of its grandparent
             leftRotation(grandparent);
+
+            // Recolor original parent and grandparent
             parent.color = BLACK;
             grandparent.color = RED;
         }
     }
 
-    public void callDelete(Data deleteData) {
-        // sending a root because that's the beginning of the tree
-        deleteRBT(root, deleteData);
+    private NodeOfTheTree getUncle(NodeOfTheTree parent) {
+        NodeOfTheTree grandparent = parent.parent;
+        if (grandparent.left == parent) {
+            return grandparent.right;
+        } else if (grandparent.right == parent) {
+            return grandparent.left;
+        } else {
+            throw new IllegalStateException("Parent is not a child of its grandparent");
+        }
     }
-    public void deleteRBT(NodeOfTheTree actualNode, Data dataToDelete) {
+
+    public void callDelete(Data dataToDelete) {
+        NodeOfTheTree node = root;
 
         // Find the node to be deleted
-        while (actualNode != null && actualNode.data != dataToDelete) {
+        while (node != null && node.data != dataToDelete) {
             // Traverse the tree to the left or right depending on the key
-            if (dataToDelete.compareTo(actualNode.data) < 0) {
-                actualNode = actualNode.left;
+            if (dataToDelete.compareTo(node.data) < 0) {
+                node = node.left;
             } else {
-                actualNode = actualNode.right;
+                node = node.right;
             }
         }
 
         // Node not found?
-        if (actualNode == null) {
+        if (node == null) {
             return;
         }
 
@@ -249,18 +210,18 @@ public class RedBlackTree extends BinarySearchTree {
         boolean deletedNodeColor;
 
         // Node has zero or one child
-        if (actualNode.left == null || actualNode.right == null) {
-            movedUpNode = deleteNodeWithZeroOrOneChild(actualNode);
-            deletedNodeColor = actualNode.color;
+        if (node.left == null || node.right == null) {
+            movedUpNode = deleteNodeWithZeroOrOneChild(node);
+            deletedNodeColor = node.color;
         }
 
         // Node has two children
         else {
             // Find minimum node of right subtree ("inorder successor" of current node)
-            NodeOfTheTree inOrderSuccessor = findMinimum(actualNode.right);
+            NodeOfTheTree inOrderSuccessor = findMinimum(node.right);
 
             // Copy inorder successor's data to current node (keep its color!)
-            actualNode.data = inOrderSuccessor.data;
+            node.data = inOrderSuccessor.data;
 
             // Delete inorder successor just as we would delete a node with 0 or 1 child
             movedUpNode = deleteNodeWithZeroOrOneChild(inOrderSuccessor);

@@ -73,32 +73,30 @@ public class BinarySearchTree {
     }
 
     NodeOfTheTree delete(NodeOfTheTree actualNode, Data deleteData) {
-
-        // no child
         if (actualNode == null) {
             return null;
         }
 
-        if (actualNode.data.compareTo(deleteData) == 0 || actualNode.left == null && actualNode.right == null) {
-            actualNode = null;
-        } else if (actualNode.data.compareTo(deleteData) > 0) {
+        if(deleteData.compareTo(actualNode.data) < 0){
             actualNode.left = delete(actualNode.left, deleteData);
-        } else if (actualNode.data.compareTo(deleteData) < 0) {
+        }
+        else if(deleteData.compareTo(actualNode.data) > 0){
             actualNode.right = delete(actualNode.right, deleteData);
-        } else {
-
-            // one child
-            if (actualNode.left == null)
+        }
+        else{
+            //one child or no child
+            if(actualNode.left == null){
                 return actualNode.right;
-            else if (actualNode.right == null)
+            }
+            //one child
+            else if(actualNode.right == null){
                 return actualNode.left;
+            }
 
-            // two children
-            NodeOfTheTree copyNode = findMinimum(actualNode.right);
+            //has two children
+            actualNode = findMinimum(actualNode.right);
 
-            actualNode.data = copyNode.data;
-
-            actualNode.right = delete(actualNode.right, actualNode.data);
+            actualNode.right = delete(actualNode.right, deleteData);
         }
 
         return actualNode;
