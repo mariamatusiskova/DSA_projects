@@ -26,7 +26,7 @@ public class RedBlackTree extends BinarySearchTree {
         leftChild.right = actualNode;
         actualNode.parent = leftChild;
 
-        replaceParentsChild(newParent, actualNode, leftChild);
+        transplant(newParent, actualNode, leftChild);
     }
 
     private void leftRotation(NodeOfTheTree node) {
@@ -42,23 +42,7 @@ public class RedBlackTree extends BinarySearchTree {
         rightChild.left = node;
         node.parent = rightChild;
 
-        replaceParentsChild(parent, node, rightChild);
-    }
-
-    private void replaceParentsChild(NodeOfTheTree parent, NodeOfTheTree oldChild, NodeOfTheTree newChild) {
-        if (parent == null) {
-            root = newChild;
-        } else if (parent.left == oldChild) {
-            parent.left = newChild;
-        } else if (parent.right == oldChild) {
-            parent.right = newChild;
-        } else {
-            throw new IllegalStateException("Node is not a child of its parent");
-        }
-
-        if (newChild != null) {
-            newChild.parent = parent;
-        }
+        transplant(parent, node, rightChild);
     }
 
     public void callInsert(Data newData) {
@@ -224,116 +208,156 @@ public class RedBlackTree extends BinarySearchTree {
         // sending a root because that's the beginning of the tree
         deleteRBT(root, deleteData);
     }
-    public void deleteRBT(NodeOfTheTree actualNode, Data dataToDelete) {
+    public void deleteRBT(NodeOfTheTree actualNode, Data deleteData) {
 
-        // Find the node to be deleted
-        while (actualNode != null && actualNode.data != dataToDelete) {
-            // Traverse the tree to the left or right depending on the key
-            if (dataToDelete.compareTo(actualNode.data) < 0) {
+        NodeOfTheTree deleteNode;
+        boolean deleteColor;
+
+        // search node to delete
+        while (actualNode != null && actualNode.data.compareTo(deleteData) == 0) {
+
+            if (actualNode.data.compareTo(deleteData) > 0) {
                 actualNode = actualNode.left;
             } else {
                 actualNode = actualNode.right;
             }
         }
 
-        // Node not found?
+        // not found
         if (actualNode == null) {
             return;
         }
 
-        // At this point, "node" is the node to be deleted
-
-        // In this variable, we'll store the node at which we're going to start to fix the R-B
-        // properties after deleting a node.
-        NodeOfTheTree movedUpNode;
-        boolean deletedNodeColor;
-
-        // Node has zero or one child
+        // no children or only right child
         if (actualNode.left == null || actualNode.right == null) {
-            movedUpNode = deleteNodeWithZeroOrOneChild(actualNode);
-            deletedNodeColor = actualNode.color;
+
+            if (actualNode.left != null) {
+                transplant(actualNode.parent, actualNode, actualNode.left);
+                deleteNode = actualNode.left;
+            } else if (actualNode.right != null) {
+                transplant(actualNode.parent, actualNode, actualNode.right);
+                deleteNode = actualNode.right;
+            // no children, two options: 1) actualNode is red, then remove it; 2) actualNode is black, replace it with NIL node, then fix RBT
+            } else {
+                NodeOfTheTree alternativeNode = actualNode.color == BLACK ? new NilNode() : null;
+                transplant(actualNode.parent, actualNode, alternativeNode);
+                deleteNode = alternativeNode;
+            }
+
+            deleteColor = actualNode.color;
+        // two children
+        } else {
+
+            NodeOfTheTree successorNode = findMinimum(actualNode.right);
+            actualNode.data = successorNode.data;
+
+            // if it is child of deleteNode
+            if (successorNode.left != null) {
+                transplant(actualNode.parent, successorNode, successorNode.left);
+                deleteNode = successorNode.left;
+            } else if (successorNode.right != null) {
+                transplant(successorNode.parent, successorNode, successorNode.right);
+                deleteNode = successorNode.right;
+            // no children, two options: 1) actualNode is red, then remove it; 2) actualNode is black, replace it with NIL node, then fix RBT
+            } else {
+                NodeOfTheTree newChild = successorNode.color == BLACK ? new NilNode() : null;
+                transplant(successorNode.parent, successorNode, newChild);
+                deleteNode = newChild;
+            }
+
+            deleteColor = successorNode.color;
         }
 
-        // Node has two children
-        else {
-            // Find minimum node of right subtree ("inorder successor" of current node)
-            NodeOfTheTree inOrderSuccessor = findMinimum(actualNode.right);
+        if (deleteColor == BLACK) {
+            deleteFixup(deleteNode);
 
-            // Copy inorder successor's data to current node (keep its color!)
-            actualNode.data = inOrderSuccessor.data;
-
-            // Delete inorder successor just as we would delete a node with 0 or 1 child
-            movedUpNode = deleteNodeWithZeroOrOneChild(inOrderSuccessor);
-            deletedNodeColor = inOrderSuccessor.color;
-        }
-
-        if (deletedNodeColor == BLACK) {
-            fixRedBlackPropertiesAfterDelete(movedUpNode);
-
-            // Remove the temporary NIL node
-            if (movedUpNode.getClass() == NilNode.class) {
-                replaceParentsChild(movedUpNode.parent, movedUpNode, null);
+            // remove NIL node
+            if (deleteNode.getClass() == NilNode.class) {
+                transplant(deleteNode.parent, deleteNode, null);
             }
         }
     }
 
-    private NodeOfTheTree deleteNodeWithZeroOrOneChild(NodeOfTheTree node) {
-        // Node has ONLY a left child --> replace by its left child
-        if (node.left != null) {
-            replaceParentsChild(node.parent, node, node.left);
-            return node.left; // moved-up node
-        }
+    // replace the node --> new parent
+    private void transplant(NodeOfTheTree parent, NodeOfTheTree nodeChild, NodeOfTheTree newChild) {
 
-        // Node has ONLY a right child --> replace by its right child
-        else if (node.right != null) {
-            replaceParentsChild(node.parent, node, node.right);
-            return node.right; // moved-up node
-        }
-
-        // Node has no children -->
-        // * node is red --> just remove it
-        // * node is black --> replace it by a temporary NIL node (needed to fix the R-B rules)
-        else {
-            NodeOfTheTree newChild = node.color == BLACK ? new NilNode() : null;
-            replaceParentsChild(node.parent, node, newChild);
-            return newChild;
-        }
-    }
-
-    private void fixRedBlackPropertiesAfterDelete(NodeOfTheTree node) {
-        // Case 1: Examined node is root, end of recursion
-        if (node == root) {
-            // Uncomment the following line if you want to enforce black roots (rule 2):
-            // node.color = BLACK;
+        if (parent == null) {
+            root = newChild;
+        } else if (parent.left == nodeChild) {
+            parent.left = newChild;
+        } else if (parent.right == nodeChild) {
+            parent.right = newChild;
+        } else {
             return;
         }
 
-        NodeOfTheTree sibling = getSibling(node);
+        if (newChild != null) {
+            newChild.parent = parent;
+        }
+    }
 
-        // Case 2: Red sibling
-        if (sibling.color == RED) {
-            handleRedSibling(node, sibling);
-            sibling = getSibling(node); // Get new sibling for fall-through to cases 3-6
+    // recursive method
+    private void deleteFixup(NodeOfTheTree deleteNode) {
+
+        NodeOfTheTree uncle;
+
+        if (deleteNode == root) {
+            deleteNode.color = BLACK;
+            return;
         }
 
-        // Cases 3+4: Black sibling with two black children
-        if (isBlack(sibling.left) && isBlack(sibling.right)) {
-            sibling.color = RED;
+        if (deleteNode == deleteNode.parent.left) {
+            uncle = deleteNode.parent.right;
+        } else if (deleteNode == deleteNode.parent.right) {
+            uncle = deleteNode.parent.left;
+        } else {
+            uncle = null;
+        }
 
-            // Case 3: Black sibling with two black children + red parent
-            if (node.parent.color == RED) {
-                node.parent.color = BLACK;
+        if (uncle == null) {
+            return;
+        }
+
+        // uncle is red, needs to be black
+        if (uncle.color == RED) {
+
+            uncle.color = BLACK;
+            deleteNode.parent.color = RED;
+
+            // fix RBT
+            if (deleteNode == deleteNode.parent.left) {
+                leftRotation(deleteNode.parent);
+            } else {
+                rightRotation(deleteNode.parent);
             }
 
-            // Case 4: Black sibling with two black children + black parent
+            if (deleteNode == deleteNode.parent.left) {
+                uncle = deleteNode.parent.right;
+            } else if (deleteNode == deleteNode.parent.right) {
+                uncle = deleteNode.parent.left;
+            } else {
+                uncle = null;
+            }
+        }
+
+        // Cases 3+4: Black uncle with two black children
+        if (isBlack(uncle.left) && isBlack(uncle.right)) {
+            uncle.color = RED;
+
+            // Case 3: Black uncle with two black children + red parent
+            if (deleteNode.parent.color == RED) {
+                deleteNode.parent.color = BLACK;
+            }
+
+            // Case 4: Black uncle with two black children + black parent
             else {
-                fixRedBlackPropertiesAfterDelete(node.parent);
+                deleteFixup(deleteNode.parent);
             }
         }
 
-        // Case 5+6: Black sibling with at least one red child
+        // Case 5+6: Black uncle with at least one red child
         else {
-            handleBlackSiblingWithAtLeastOneRedChild(node, sibling);
+            handleBlackSiblingWithAtLeastOneRedChild(deleteNode, uncle);
         }
     }
 
@@ -366,31 +390,6 @@ public class RedBlackTree extends BinarySearchTree {
         } else {
             sibling.left.color = BLACK;
             rightRotation(node.parent);
-        }
-    }
-
-    private void handleRedSibling(NodeOfTheTree node, NodeOfTheTree sibling) {
-        // Recolor...
-        sibling.color = BLACK;
-        node.parent.color = RED;
-
-        // ... and rotate
-        if (node == node.parent.left) {
-            leftRotation(node.parent);
-        } else {
-            rightRotation(node.parent);
-        }
-    }
-
-    private NodeOfTheTree getSibling(NodeOfTheTree node) {
-        NodeOfTheTree parent = node.parent;
-        if (node == parent.left) {
-            return parent.right;
-        } else if (node == parent.right) {
-            return parent.left;
-        } else {
-            System.out.println("Couldn't find data in the red-black tree");
-            return null;
         }
     }
 
