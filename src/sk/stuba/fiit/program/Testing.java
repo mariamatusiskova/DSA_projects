@@ -11,16 +11,14 @@ import java.util.Random;
 public class Testing {
     public String generateData() {
 
-        String result = null;
-
         String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvxyz0123456789";
 
         Random ran = new Random();
 
         // make a string from chars of array --> append()
-        StringBuilder sb = new StringBuilder(10);
+        StringBuilder sb = new StringBuilder(5);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             sb.append(chars.charAt(ran.nextInt(chars.length())));
         }
 
