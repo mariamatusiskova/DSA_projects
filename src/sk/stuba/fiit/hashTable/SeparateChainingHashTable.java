@@ -12,21 +12,14 @@ package sk.stuba.fiit.hashTable;
 
 import sk.stuba.fiit.program.Data;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 // linked list at the index in the hash table
 public class SeparateChainingHashTable {
 
-    public class HashNode {
-
-        public Data data;
-        public HashNode next;
-
-        public HashNode(Data data, HashNode nextNode) {
-            this.data = data;
-            this.next = nextNode;
-        }
-    }
-
-    public HashNode buckets[];
+    // dynamic array of objects
+    public ArrayList<LinkedList<Data>> buckets = new ArrayList<LinkedList<Data>>();
     public int tableSize;
     public int countNodes;
 
@@ -34,8 +27,11 @@ public class SeparateChainingHashTable {
     public SeparateChainingHashTable(int tableSize) {
 
         this.tableSize = tableSize;
-        this.buckets = new HashNode[tableSize];
         this.countNodes = 0;
+
+        for (int i = 0; i < tableSize; i++) {
+            buckets.add(new LinkedList<Data>());
+        }
        // this.tableSize = MAX_SIZE;
     }
 
@@ -49,91 +45,87 @@ public class SeparateChainingHashTable {
 //        return (hash & 0x7fffffff) % SIZE;
 //    }
 
-    public SeparateChainingHashTable insert(SeparateChainingHashTable hashTable, Data data) {
+    public void insert(Data data) {
 
         // hexadecimal number provides only positive numbers
         int index = (data.key & 0x7fffffff) % tableSize;
 
-//        if (data == null) {
-//            delete(hashTable, data);
-//            return hashTable;
-//        }
-
-        for (HashNode node = buckets[index]; node != null && node.next != null; node = node.next) {
-            if (data.key == node.data.key) {
-                node.next.data = node.data;
-                return hashTable;
+        for (int i = 0; i < buckets.get(index).size(); i++) {
+            if (data.value.equals(buckets.get(index).get(i).value)) {
+                buckets.get(index).get(i).value = data.value;
+                return;
             }
         }
 
-        if (countNodes / tableSize > 0.7f) {
-            hashTable = hashTable.resize(this.tableSize*2);
-        }
-
-        buckets[index] = new HashNode(data, buckets[index]);
+        buckets.get(index).add(data);
         countNodes++;
 
-        return hashTable;
+        if (countNodes / tableSize > 0.7f) {
+            resize(this.tableSize*2);
+        }
     }
 
-    SeparateChainingHashTable resize(int sizeOfTable) {
-        // in constructor
-        SeparateChainingHashTable newHashTable = new SeparateChainingHashTable(sizeOfTable);
+    void resize(int sizeOfTable) {
 
-        for (int i = 0; i < tableSize; i++) {
-            for (HashNode node = buckets[i]; node!= null; node = node.next) {
-                newHashTable = newHashTable.insert(newHashTable ,node.data);
+        ArrayList<LinkedList<Data>> newTable = new ArrayList<LinkedList<Data>>();
+
+        // create empty table of new size
+        for (int i = 0; i < sizeOfTable; i++) {
+            newTable.add(new LinkedList<Data>());
+        }
+
+        for (LinkedList<Data> bucket : buckets) {
+            for (Data data : bucket) {
+                int updateIndex = (data.key & 0x7fffffff) % sizeOfTable;
+                newTable.get(updateIndex).add(data);
             }
         }
 
-        return  newHashTable;
-
+        // update after resize
+        this.tableSize = sizeOfTable;
+        this.buckets = newTable;
     }
 
-    public SeparateChainingHashTable delete(SeparateChainingHashTable hashTable, Data data) {
+    public void delete(Data data) {
 
         int index = (data.key & 0x7fffffff) % tableSize;
-        buckets[index] = deleteRecursive(buckets[index], data);
+
+        if (buckets.get(index) == null) {
+            return;
+        }
+
+        for (int i = 0; i < buckets.get(index).size(); i++) {
+                if (data.value.equals(buckets.get(index).get(i).value)) {
+                    buckets.get(index).removeFirstOccurrence(buckets.get(index).get(i));
+                    countNodes--;
+                    return;
+                }
+        }
 
         if (countNodes / tableSize < 0.3f) {
-            hashTable = hashTable.resize(this.tableSize/2);
+            resize(this.tableSize/2);
         }
 
-        return hashTable;
-    }
-
-    HashNode deleteRecursive(HashNode node, Data data) {
-
-        if (node == null) {
-            return null;
-        }
-
-        if (data.key == node.data.key) {
-            countNodes--;
-            return node.next;
-        }
-
-        node.next = deleteRecursive(node.next, data);
-        return node;
+        return;
     }
 
     public boolean search(Data data) {
 
         int index = (data.key & 0x7fffffff) % tableSize;
 
-        if (buckets[index] == null) {
-            System.out.println("searched value: " + data.key + "|" + data.value + " --> false");
+        if (buckets.get(index) == null) {
+            System.out.println("searched value: " + data.value + " | " + data.key + " --> false");
             return false;
         }
 
-        for (HashNode node = buckets[index]; node != null; node = node.next) {
-            if (data.key == node.data.key) {
-                System.out.println("searched value: " + data.key + "|" + data.value + " --> true");
+        for (int i = 0; i < buckets.get(index).size(); i++) {
+            if (data.value.equals(buckets.get(index).get(i).value)) {
+                System.out.println("searched value: " + data.value + " | " + data.key +" --> true");
                 return true;
             }
         }
 
-        System.out.println("searched value: " + data.key + "|" + data.value + " --> false");
+        System.out.println("searched value: " + data.value + " | " + data.key + " --> false");
         return false;
     }
 }
