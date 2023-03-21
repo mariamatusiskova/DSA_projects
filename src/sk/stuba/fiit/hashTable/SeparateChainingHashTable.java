@@ -20,9 +20,9 @@ public class SeparateChainingHashTable {
         public Data data;
         public HashNode next;
 
-        public HashNode(Data data) {
+        public HashNode(Data data, HashNode nextNode) {
             this.data = data;
-            this.next = null;
+            this.next = nextNode;
         }
     }
 
@@ -54,31 +54,29 @@ public class SeparateChainingHashTable {
         // hexadecimal number provides only positive numbers
         int index = (data.key & 0x7fffffff) % tableSize;
 
-        if (data == null) {
-            delete(hashTable, data);
-            return hashTable;
-        }
+//        if (data == null) {
+//            delete(hashTable, data);
+//            return hashTable;
+//        }
 
-        for (HashNode node = buckets[index]; node != null; node = node.next) {
-            if (data.compareTo(node.data) == 0) {
+        for (HashNode node = buckets[index]; node != null && node.next != null; node = node.next) {
+            if (data.key == node.data.key) {
                 node.next.data = node.data;
                 return hashTable;
             }
         }
 
-        if (buckets[index] == null) {
-            buckets[index] = new HashNode(data);
-            countNodes++;
+        if (countNodes / tableSize > 0.7f) {
+            hashTable = hashTable.resize(this.tableSize*2);
         }
 
-        if (countNodes / tableSize > 0.7f) {
-            hashTable = hashTable.rezise(this.tableSize*2);
-        }
+        buckets[index] = new HashNode(data, buckets[index]);
+        countNodes++;
 
         return hashTable;
     }
 
-    SeparateChainingHashTable rezise(int sizeOfTable) {
+    SeparateChainingHashTable resize(int sizeOfTable) {
         // in constructor
         SeparateChainingHashTable newHashTable = new SeparateChainingHashTable(sizeOfTable);
 
@@ -98,7 +96,7 @@ public class SeparateChainingHashTable {
         buckets[index] = deleteRecursive(buckets[index], data);
 
         if (countNodes / tableSize < 0.3f) {
-            hashTable = hashTable.rezise(this.tableSize/2);
+            hashTable = hashTable.resize(this.tableSize/2);
         }
 
         return hashTable;
@@ -110,7 +108,7 @@ public class SeparateChainingHashTable {
             return null;
         }
 
-        if (data.compareTo(node.data) == 0) {
+        if (data.key == node.data.key) {
             countNodes--;
             return node.next;
         }
@@ -124,16 +122,18 @@ public class SeparateChainingHashTable {
         int index = (data.key & 0x7fffffff) % tableSize;
 
         if (buckets[index] == null) {
+            System.out.println("searched value: " + data.key + "|" + data.value + " --> false");
             return false;
         }
 
         for (HashNode node = buckets[index]; node != null; node = node.next) {
-            if (data.compareTo(node.data) == 0) {
-                System.out.println("searched value: " + data.key + "|" + data.value + ", found value: " + node.data.key + "|" + node.data.value);
+            if (data.key == node.data.key) {
+                System.out.println("searched value: " + data.key + "|" + data.value + " --> true");
                 return true;
             }
         }
 
+        System.out.println("searched value: " + data.key + "|" + data.value + " --> false");
         return false;
     }
 }

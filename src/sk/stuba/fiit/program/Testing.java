@@ -134,18 +134,42 @@ public class Testing {
 
         Data separateChaining = new Data(generateData(), generateRandomNumber());
         chaining = chaining.insert(chaining, separateChaining);
+        chaining = chaining.insert(chaining, separateChaining);
 
-        for (int j = 0; j < chaining.tableSize; j++) {
-            if (chaining.buckets[j] != null) {
-                    System.out.print(chaining.buckets[j].data.value + " | " + chaining.buckets[j].data.key + " | " + chaining.buckets[j].data.number);
-                System.out.println();
+//        for (int j = 0; j < chaining.tableSize; j++) {
+//            if (chaining.buckets[j] != null) {
+//                    System.out.print(chaining.buckets[j].data.value + " | " + chaining.buckets[j].data.key + " | " + chaining.buckets[j].data.number);
+//                System.out.println();
+//            }
+//        }
+
+        System.out.println();
+        for (int i = 0; i < chaining.tableSize; i++) {
+            System.out.print("Bucket " + i + ":  ");
+            SeparateChainingHashTable.HashNode start = chaining.buckets[i];
+            while(start != null) {
+                System.out.print(start.data.value + " | " + start.data.key + " | " + start.data.number);
+                start = start.next;
             }
+            System.out.println();
         }
+
+        chaining.search(separateChaining);
 
         chaining = chaining.delete(chaining, new Data(generateData(), generateRandomNumber()));
 
         chaining.search(separateChaining);
 
+        System.out.println();
+        for (int i = 0; i < chaining.tableSize; i++) {
+            System.out.print("Bucket " + i + ":  ");
+            SeparateChainingHashTable.HashNode start = chaining.buckets[i];
+            while(start != null) {
+                System.out.print(start.data.value + " | " + start.data.key + " | " + start.data.number);
+                start = start.next;
+            }
+            System.out.println();
+        }
 
     }
 
