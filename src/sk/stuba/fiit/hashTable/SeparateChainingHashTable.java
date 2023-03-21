@@ -12,9 +12,6 @@ package sk.stuba.fiit.hashTable;
 
 import sk.stuba.fiit.program.Data;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-
 // linked list at the index in the hash table
 public class SeparateChainingHashTable {
 
@@ -29,12 +26,12 @@ public class SeparateChainingHashTable {
         }
     }
 
-    private HashNode buckets[];
-    private int tableSize;
-    private int countNodes;
+    public HashNode buckets[];
+    public int tableSize;
+    public int countNodes;
 
     // default constructor
-    SeparateChainingHashTable(int tableSize) {
+    public SeparateChainingHashTable(int tableSize) {
 
         this.tableSize = tableSize;
         this.buckets = new HashNode[tableSize];
@@ -52,21 +49,15 @@ public class SeparateChainingHashTable {
 //        return (hash & 0x7fffffff) % SIZE;
 //    }
 
-    // main
-    void callInsert(Data data) {
-        SeparateChainingHashTable table = new SeparateChainingHashTable(2);
-        table = insert(table, data);
-    }
-
-    void callDelete(Data data) {
-        SeparateChainingHashTable table = new SeparateChainingHashTable(2);
-        table = delete(table, data);
-    }
-
-    SeparateChainingHashTable insert(SeparateChainingHashTable hashTable, Data data) {
+    public SeparateChainingHashTable insert(SeparateChainingHashTable hashTable, Data data) {
 
         // hexadecimal number provides only positive numbers
         int index = (data.key & 0x7fffffff) % tableSize;
+
+        if (data == null) {
+            delete(hashTable, data);
+            return hashTable;
+        }
 
         for (HashNode node = buckets[index]; node != null; node = node.next) {
             if (data.compareTo(node.data) == 0) {
@@ -101,7 +92,7 @@ public class SeparateChainingHashTable {
 
     }
 
-    SeparateChainingHashTable delete(SeparateChainingHashTable hashTable, Data data) {
+    public SeparateChainingHashTable delete(SeparateChainingHashTable hashTable, Data data) {
 
         int index = (data.key & 0x7fffffff) % tableSize;
         buckets[index] = deleteRecursive(buckets[index], data);
@@ -116,19 +107,19 @@ public class SeparateChainingHashTable {
     HashNode deleteRecursive(HashNode node, Data data) {
 
         if (node == null) {
-            node = null;
+            return null;
         }
 
         if (data.compareTo(node.data) == 0) {
-            node = node.next;
             countNodes--;
+            return node.next;
         }
 
         node.next = deleteRecursive(node.next, data);
         return node;
     }
 
-    boolean search(Data data) {
+    public boolean search(Data data) {
 
         int index = (data.key & 0x7fffffff) % tableSize;
 
@@ -145,41 +136,4 @@ public class SeparateChainingHashTable {
 
         return false;
     }
-
-
-//       Data searchData = hashTable.get(index).data;
-//
-//       int index = hash(key, table->size); // determine which bucket to search
-//       Node* node = table->buckets[index];
-//       while (node != NULL) {
-//           if (node->key == key) {
-//               return &(node->value); // return a pointer to the value if the key is found
-//           }
-//           node = node->next;
-//       }
-//       return NULL; // return
-    // }
-
-//   void resizeHashTable() {
-//        // idk
-//        HashNode[] oldHashTable = hashTable;
-//        hashTable = new HashNode[MAX_SIZE]
-//   }
-
-
-//        int index = (hashNode(data));
-//        if (hashTable[index] == null) {
-//            hashTable[index] = new HashNode(data);
-//         } else {
-//            HashNode entry = hashTable[index];
-//            while (entry.next != null && entry.data.compareTo(data) != 0)
-//                entry = entry.next;
-//            if (entry.data.compareTo(data) == 0) {
-//                entry.data = data;
-//            } else {
-//                entry.next = new HashNode(data);
-//            }
-//        }
-//        countNodes++;
-//    }
 }

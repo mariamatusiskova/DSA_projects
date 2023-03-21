@@ -4,6 +4,7 @@ package sk.stuba.fiit.program;
 import sk.stuba.fiit.binarySearchTree.AVLTree;
 import sk.stuba.fiit.binarySearchTree.BinarySearchTree;
 import sk.stuba.fiit.binarySearchTree.RedBlackTree;
+import sk.stuba.fiit.hashTable.SeparateChainingHashTable;
 //import sk.stuba.fiit.binarySearchTree.SplayTree;
 
 import java.util.Random;
@@ -117,9 +118,33 @@ public class Testing {
         rbt.callDelete(specificRBT);
         rbt.callSearch(specificRBT);
 
-          tr.callInorder(rbt);
+        tr.callInorder(rbt);
         tr.callPreorder(rbt);
         tr.callPostorder(rbt);
+
+        System.out.println();
+        System.out.println("*************** Separate Chaining ***************");
+        System.out.println();
+
+        SeparateChainingHashTable chaining = new SeparateChainingHashTable(10);
+
+        for (int i = 0; i < (chaining.tableSize-1); i++) {
+            chaining = chaining.insert(chaining, new Data(generateData(), generateRandomNumber()));
+        }
+
+        Data separateChaining = new Data(generateData(), generateRandomNumber());
+        chaining = chaining.insert(chaining, separateChaining);
+
+        for (int j = 0; j < chaining.tableSize; j++) {
+            if (chaining.buckets[j] != null) {
+                    System.out.print(chaining.buckets[j].data.value + " | " + chaining.buckets[j].data.key + " | " + chaining.buckets[j].data.number);
+                System.out.println();
+            }
+        }
+
+        chaining = chaining.delete(chaining, new Data(generateData(), generateRandomNumber()));
+
+        chaining.search(separateChaining);
 
 
     }
