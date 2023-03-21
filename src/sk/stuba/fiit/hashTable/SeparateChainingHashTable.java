@@ -1,12 +1,7 @@
 // Source:
 // https://sd.blackball.lv/library/Introduction_to_Algorithms_Third_Edition_(2009).pdf
-// https://everythingcomputerscience.com/books/schoolboek-data_structures_and_algorithms_in_java.pdf (page 577)
-// "Algorithms, Part I" course on Coursera --> Separate Chaining (Princeton University)
-// https://phpfog.com/how-to-create-a-hash-table-in-java-chaining-example/
-// https://opendatastructures.org/ods-java/5_1_ChainedHashTable_Hashin.html
-// https://www.sanfoundry.com/java-program-implement-hash-tables-chaining-list-heads/
-// https://www.cs.utexas.edu/~slaberge/problem_pages/hash_table_resize/HashTableResizeSolution.pdf
 // https://medium.com/omarelgabrys-blog/hash-tables-2fec6870207f
+// Adam Gábor, AIS ID 116174, DSA
 
 package sk.stuba.fiit.hashTable;
 
@@ -50,6 +45,7 @@ public class SeparateChainingHashTable {
         // hexadecimal number provides only positive numbers
         int index = (data.key & 0x7fffffff) % tableSize;
 
+        // no duplicity
         for (int i = 0; i < buckets.get(index).size(); i++) {
             if (data.value.equals(buckets.get(index).get(i).value)) {
                 buckets.get(index).get(i).value = data.value;
@@ -98,15 +94,12 @@ public class SeparateChainingHashTable {
                 if (data.value.equals(buckets.get(index).get(i).value)) {
                     buckets.get(index).removeFirstOccurrence(buckets.get(index).get(i));
                     countNodes--;
-                    return;
                 }
         }
 
         if (countNodes / tableSize < 0.3f) {
             resize(this.tableSize/2);
         }
-
-        return;
     }
 
     public boolean search(Data data) {
