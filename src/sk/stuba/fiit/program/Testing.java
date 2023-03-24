@@ -130,20 +130,20 @@ public class Testing {
         SeparateChainingHashTable chaining = new SeparateChainingHashTable(10);
 
         for (int i = 0; i < (chaining.tableSize-1); i++) {
-            chaining.insert(new Data(generateData(), generateRandomNumber()));
+            chaining.insert(new DataHashTable(generateRandomNumber(), generateData()));
         }
 
-        Data separateChaining = new Data(generateData(), generateRandomNumber());
+        DataHashTable separateChaining = new DataHashTable(generateRandomNumber(), generateData());
         chaining.insert(separateChaining);
         chaining.insert(separateChaining);
 
 
         int j = 0;
         System.out.println();
-        for (LinkedList<Data> bucket : chaining.buckets) {
+        for (LinkedList<DataHashTable> bucket : chaining.buckets) {
             System.out.print("Bucket " + j + ":  ");
-            for (Data dataOfTable : bucket) {
-                System.out.print(dataOfTable.value + " | " + dataOfTable.key + " | " + dataOfTable.number + " ");
+            for (DataHashTable dataOfTable : bucket) {
+                System.out.print(dataOfTable.value + " | " + dataOfTable.key + " | " + " ");
             }
             System.out.println();
             j++;
@@ -151,18 +151,18 @@ public class Testing {
 
         System.out.println();
 
-        chaining.search(separateChaining);
+        chaining.search(separateChaining.key);
 
-        chaining.delete(separateChaining);
+        chaining.delete(separateChaining.key);
 
-        chaining.search(separateChaining);
+        chaining.search(separateChaining.key);
 
         int k = 0;
         System.out.println();
-        for (LinkedList<Data> bucket : chaining.buckets) {
+        for (LinkedList<DataHashTable> bucket : chaining.buckets) {
             System.out.print("Bucket " + k + ":  ");
-            for (Data dataOfTable : bucket) {
-                System.out.print(dataOfTable.value + " | " + dataOfTable.key + " | " + dataOfTable.number);
+            for (DataHashTable dataOfTable : bucket) {
+                System.out.print(dataOfTable.value + " | " + dataOfTable.key);
             }
             System.out.println();
             k++;

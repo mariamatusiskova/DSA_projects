@@ -1,11 +1,11 @@
 // Source:
 // https://sd.blackball.lv/library/Introduction_to_Algorithms_Third_Edition_(2009).pdf
 // https://medium.com/omarelgabrys-blog/hash-tables-2fec6870207f
-// Adam Gábor, AIS ID 116174, DSA
+// Adam Gábor, AIS ID 116174, DSA documentation
 
 package sk.stuba.fiit.hashTable;
 
-import sk.stuba.fiit.program.Data;
+import sk.stuba.fiit.program.DataHashTable;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -14,7 +14,7 @@ import java.util.LinkedList;
 public class SeparateChainingHashTable {
 
     // dynamic array of objects
-    public ArrayList<LinkedList<Data>> buckets = new ArrayList<LinkedList<Data>>();
+    public ArrayList<LinkedList<DataHashTable>> buckets = new ArrayList<>();
     public int tableSize;
     public int countNodes;
 
@@ -25,9 +25,8 @@ public class SeparateChainingHashTable {
         this.countNodes = 0;
 
         for (int i = 0; i < tableSize; i++) {
-            buckets.add(new LinkedList<Data>());
+            buckets.add(new LinkedList<>());
         }
-       // this.tableSize = MAX_SIZE;
     }
 
 //    private int hashNode(Data data) {
@@ -40,14 +39,14 @@ public class SeparateChainingHashTable {
 //        return (hash & 0x7fffffff) % SIZE;
 //    }
 
-    public void insert(Data data) {
+    public void insert(DataHashTable data) {
 
         // hexadecimal number provides only positive numbers
-        int index = (data.key & 0x7fffffff) % tableSize;
+        int index = (data.key & 0x7fffffff) % (tableSize-1);
 
         // no duplicity
         for (int i = 0; i < buckets.get(index).size(); i++) {
-            if (data.value.equals(buckets.get(index).get(i).value)) {
+            if (data.key == buckets.get(index).get(i).key) {
                 buckets.get(index).get(i).value = data.value;
                 return;
             }
@@ -63,16 +62,16 @@ public class SeparateChainingHashTable {
 
     void resize(int sizeOfTable) {
 
-        ArrayList<LinkedList<Data>> newTable = new ArrayList<LinkedList<Data>>();
+        ArrayList<LinkedList<DataHashTable>> newTable = new ArrayList<>();
 
         // create empty table of new size
         for (int i = 0; i < sizeOfTable; i++) {
-            newTable.add(new LinkedList<Data>());
+            newTable.add(new LinkedList<>());
         }
 
-        for (LinkedList<Data> bucket : buckets) {
-            for (Data data : bucket) {
-                int updateIndex = (data.key & 0x7fffffff) % sizeOfTable;
+        for (LinkedList<DataHashTable> bucket : buckets) {
+            for (DataHashTable data : bucket) {
+                int updateIndex = (data.key & 0x7fffffff) % (sizeOfTable-1);
                 newTable.get(updateIndex).add(data);
             }
         }
@@ -82,16 +81,16 @@ public class SeparateChainingHashTable {
         this.buckets = newTable;
     }
 
-    public void delete(Data data) {
+    public void delete(int key) {
 
-        int index = (data.key & 0x7fffffff) % tableSize;
+        int index = (key & 0x7fffffff) % (tableSize-1);
 
         if (buckets.get(index) == null) {
             return;
         }
 
         for (int i = 0; i < buckets.get(index).size(); i++) {
-                if (data.value.equals(buckets.get(index).get(i).value)) {
+                if (key == buckets.get(index).get(i).key) {
                     buckets.get(index).removeFirstOccurrence(buckets.get(index).get(i));
                     countNodes--;
                 }
@@ -102,23 +101,24 @@ public class SeparateChainingHashTable {
         }
     }
 
-    public boolean search(Data data) {
+    public boolean search(int key) {
 
-        int index = (data.key & 0x7fffffff) % tableSize;
+        int index = (key & 0x7fffffff) % (tableSize-1);
 
         if (buckets.get(index) == null) {
-            System.out.println("searched value: " + data.value + " | " + data.key + " --> false");
+            System.out.println("searched key: " + key + " --> false");
             return false;
         }
 
         for (int i = 0; i < buckets.get(index).size(); i++) {
-            if (data.value.equals(buckets.get(index).get(i).value)) {
-                System.out.println("searched value: " + data.value + " | " + data.key +" --> true");
+            DataHashTable currentData = buckets.get(index).get(i);
+            if (key == buckets.get(index).get(i).key) {
+                System.out.println("searched data: " + currentData.key + " | " + currentData.value + " --> true");
                 return true;
             }
         }
 
-        System.out.println("searched value: " + data.value + " | " + data.key + " --> false");
+        System.out.println("searched key: " + key + " --> false");
         return false;
     }
 }

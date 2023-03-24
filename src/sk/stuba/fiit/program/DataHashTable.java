@@ -2,12 +2,7 @@
 
 package sk.stuba.fiit.program;
 
-import java.util.Comparator;
-import java.util.Objects;
-
-public class Data implements Comparable<Data> {
-
-    public int number;
+public class DataHashTable implements Comparable<DataHashTable> {
 
     // random String
     public String value;
@@ -15,15 +10,12 @@ public class Data implements Comparable<Data> {
     // key hashed from string
     public int key;
 
-    public Data(String value, int number) {
+    public DataHashTable(int key, String value) {
         this.value = value;
-        this.number = number;
-        this.key = value.hashCode();
+        this.key = key;
     }
 
-
-
-    public int compareTo(Data other){
+    public int compareTo(DataHashTable other){
         if(this.key > other.key) return 1;
         if(this.key == other.key) return 0;
         return -1;
