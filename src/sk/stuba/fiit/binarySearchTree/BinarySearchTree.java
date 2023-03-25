@@ -51,23 +51,22 @@ public class BinarySearchTree {
             return false;
         }
 
-        if (actualNode.data.compareTo(searchValue) == 0) {
-            return true;
-        } else if (actualNode.data.compareTo(searchValue) > 0) {
-                return search(actualNode.left, searchValue);
-        } else if (actualNode.data.compareTo(searchValue) < 0) {
-                return search(actualNode.right, searchValue);
-        } else {
-            return false;
+        while (actualNode != null) {
+            if (actualNode.data.key == searchValue.key) {
+                return true;
+            } else if (actualNode.data.key > searchValue.key) {
+                actualNode = actualNode.left;
+            } else if (actualNode.data.key < searchValue.key) {
+                actualNode = actualNode.right;
+            }
         }
+        return false;
     }
 
     // method for calling recursive method search
-    public boolean callSearch(Data searchData) {
+    public void callSearch(Data searchData) {
         // sending a root because that's the beginning of the tree
-        boolean searchedValue = search(root, searchData);
-        System.out.println("expected value: " + searchedValue + " | " + searchData.value + " | " + searchData.number);
-        return searchedValue;
+        search(root, searchData);
     }
 
     NodeOfTheTree delete(NodeOfTheTree actualNode, Data deleteData) {

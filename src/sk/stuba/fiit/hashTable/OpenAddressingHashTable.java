@@ -75,32 +75,12 @@ public class OpenAddressingHashTable {
 
             if (buckets.get(index).key == key) {
                 DataHashTable currentData = buckets.get(index);
-                System.out.println("searched data: " + currentData.key + " | " + currentData.value + " --> true");
                 return true;
             }
             index = (index + 1) % (tableSize-1);
         }
 
-        System.out.println("searched key: " + key + " --> false");
         return false;
-    }
-
-    private void resize2(int sizeOfTable) {
-
-        ArrayList<DataHashTable> newBuckets = new ArrayList<>();
-
-        for (int i = 0; i < sizeOfTable; i++) {
-            newBuckets.add(null);
-        }
-
-        for (DataHashTable data : buckets) {
-            int updateIndex = (data.key & 0x7fffffff) % (sizeOfTable-1);
-            newBuckets.set(updateIndex, data);
-        }
-
-        // update after resize
-        this.tableSize = sizeOfTable;
-        this.buckets = newBuckets;
     }
 
     private void resize(int sizeOfTable) {

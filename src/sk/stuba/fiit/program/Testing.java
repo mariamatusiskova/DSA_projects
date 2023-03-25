@@ -54,7 +54,7 @@ public class Testing {
         tree.callInsert(specific);
         endTime = System.nanoTime();
         duration = endTime - startTime;
-        System.out.println("Time taken to insert " + 1 + " element: " + duration + " nanoseconds");
+        System.out.println("Time taken to insert " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds ");
         System.out.println();
 
         // search testing
@@ -62,7 +62,7 @@ public class Testing {
         tree.callSearch(specific);
         endTime = System.nanoTime();
         duration = endTime - startTime;
-        System.out.println("Time taken to search " + 1 + " element: " + duration + " nanoseconds");
+        System.out.println("Time taken to search " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
         System.out.println();
 
         // delete testing
@@ -70,7 +70,7 @@ public class Testing {
         tree.callDelete(specific);
         endTime = System.nanoTime();
         duration = endTime - startTime;
-        System.out.println("Time taken to delete " + 1 + " element: " + duration + " nanoseconds");
+        System.out.println("Time taken to delete " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
         System.out.println();
     }
 
@@ -88,7 +88,7 @@ public class Testing {
 
        endTime = System.nanoTime();
        duration = endTime - startTime;
-       System.out.println("Time taken to tree with " + 1 + " element: " + duration + " nanoseconds");
+       System.out.println("Time taken to tree with " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
        System.out.println();
    }
 
@@ -104,7 +104,7 @@ public class Testing {
         table.insert(specificHashTable);
         endTime = System.nanoTime();
         duration = endTime - startTime;
-        System.out.println("Time taken to insert " + 1 + " element: " + duration + " nanoseconds");
+        System.out.println("Time taken to insert " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
         System.out.println();
 
         // search testing
@@ -112,7 +112,7 @@ public class Testing {
         table.search(specificHashTable.key);
         endTime = System.nanoTime();
         duration = endTime - startTime;
-        System.out.println("Time taken to search " + 1 + " element: " + duration + " nanoseconds");
+        System.out.println("Time taken to search " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
         System.out.println();
 
         // delete testing
@@ -120,7 +120,7 @@ public class Testing {
         table.delete(specificHashTable.key);
         endTime = System.nanoTime();
         duration = endTime - startTime;
-        System.out.println("Time taken to delete " + 1 + " element: " + duration + " nanoseconds");
+        System.out.println("Time taken to delete " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
         System.out.println();
 
     }
@@ -136,7 +136,7 @@ public class Testing {
         table.insert(specificHashTable);
         endTime = System.nanoTime();
         duration = endTime - startTime;
-        System.out.println("Time taken to insert " + 1 + " element: " + duration + " nanoseconds");
+        System.out.println("Time taken to insert " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
         System.out.println();
 
         // search testing
@@ -144,7 +144,7 @@ public class Testing {
         table.search(specificHashTable.key);
         endTime = System.nanoTime();
         duration = endTime - startTime;
-        System.out.println("Time taken to search " + 1 + " element: " + duration + " nanoseconds");
+        System.out.println("Time taken to search " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
         System.out.println();
 
         // delete testing
@@ -152,7 +152,7 @@ public class Testing {
         table.delete(specificHashTable.key);
         endTime = System.nanoTime();
         duration = endTime - startTime;
-        System.out.println("Time taken to delete " + 1 + " element: " + duration + " nanoseconds");
+        System.out.println("Time taken to delete " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
         System.out.println();
     }
 
@@ -170,7 +170,7 @@ public class Testing {
 
         endTime = System.nanoTime();
         duration = endTime - startTime;
-        System.out.println("Time taken to separate chaining hash table with " + 1 + " element: " + duration + " nanoseconds");
+        System.out.println("Time taken to separate chaining hash table with " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
         System.out.println();
     }
 
@@ -188,7 +188,7 @@ public class Testing {
 
         endTime = System.nanoTime();
         duration = endTime - startTime;
-        System.out.println("Time taken to linear probing hash table one" + 1 + " element : " + duration + " nanoseconds");
+        System.out.println("Time taken to linear probing hash table one" + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
         System.out.println();
     }
 
@@ -408,33 +408,26 @@ public class Testing {
         System.out.println("*************** RBT ***************");
         test.testTreeInsertDeleteSearchIndividually(redBlackTree, 1000);
 
-        System.out.println("*************** BST ***************");
-        test.testTreeInsertDeleteSearchIndividually(bst, 10000);
-        System.out.println("*************** AVL ***************");
-        test.testTreeInsertDeleteSearchIndividually(avlTree, 10000);
-        System.out.println("*************** RBT ***************");
-        test.testTreeInsertDeleteSearchIndividually(redBlackTree, 10000);
-
-        System.out.println("*************** BST ***************");
-        test.testTreeInsertDeleteSearchIndividually(bst, 100000);
-        System.out.println("*************** AVL ***************");
-        test.testTreeInsertDeleteSearchIndividually(avlTree, 100000);
-        System.out.println("*************** RBT ***************");
-        test.testTreeInsertDeleteSearchIndividually(redBlackTree, 100000);
-
-        System.out.println("*************** BST ***************");
-        test.testTreeInsertDeleteSearchIndividually(bst, 1000000);
-        System.out.println("*************** AVL ***************");
-        test.testTreeInsertDeleteSearchIndividually(avlTree, 1000000);
-        System.out.println("*************** RBT ***************");
-        test.testTreeInsertDeleteSearchIndividually(redBlackTree, 1000000);
-
-        System.out.println("*************** BST ***************");
-        test.testTreeInsertDeleteSearchIndividually(bst, 10000000);
-        System.out.println("*************** AVL ***************");
-        test.testTreeInsertDeleteSearchIndividually(avlTree, 10000000);
-        System.out.println("*************** RBT ***************");
-        test.testTreeInsertDeleteSearchIndividually(redBlackTree, 10000000);
+//        System.out.println("*************** BST ***************");
+//        test.testTreeInsertDeleteSearchIndividually(bst, 10000);
+//        System.out.println("*************** AVL ***************");
+//        test.testTreeInsertDeleteSearchIndividually(avlTree, 10000);
+//        System.out.println("*************** RBT ***************");
+//        test.testTreeInsertDeleteSearchIndividually(redBlackTree, 10000);
+//
+//        System.out.println("*************** BST ***************");
+//        test.testTreeInsertDeleteSearchIndividually(bst, 100000);
+//        System.out.println("*************** AVL ***************");
+//        test.testTreeInsertDeleteSearchIndividually(avlTree, 100000);
+//        System.out.println("*************** RBT ***************");
+//        test.testTreeInsertDeleteSearchIndividually(redBlackTree, 100000);
+//
+//        System.out.println("*************** BST ***************");
+//        test.testTreeInsertDeleteSearchIndividually(bst, 1000000);
+//        System.out.println("*************** AVL ***************");
+//        test.testTreeInsertDeleteSearchIndividually(avlTree, 1000000);
+//        System.out.println("*************** RBT ***************");
+//        test.testTreeInsertDeleteSearchIndividually(redBlackTree, 1000000);
 
         // whole tree
 
