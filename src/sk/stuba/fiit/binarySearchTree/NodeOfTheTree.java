@@ -1,7 +1,5 @@
 package sk.stuba.fiit.binarySearchTree;
 
-import sk.stuba.fiit.program.Data;
-
 // Node for storing values and keeping a reference to each child
 public class NodeOfTheTree {
 

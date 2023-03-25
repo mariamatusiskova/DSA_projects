@@ -1,9 +1,6 @@
 // Source of studying: https://cseweb.ucsd.edu/~kube/cls/100/Lectures/lec16/lec16-15.html
 
-package sk.stuba.fiit.program;
-
-import java.util.Comparator;
-import java.util.Objects;
+package sk.stuba.fiit.binarySearchTree;
 
 public class Data implements Comparable<Data> {
 

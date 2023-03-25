@@ -5,8 +5,6 @@
 
 package sk.stuba.fiit.hashTable;
 
-import sk.stuba.fiit.program.DataHashTable;
-
 import java.util.ArrayList;
 import java.util.LinkedList;
 
@@ -15,12 +13,14 @@ public class SeparateChainingHashTable {
 
     // dynamic array of objects
     public ArrayList<LinkedList<DataHashTable>> buckets = new ArrayList<>();
+    public int sentSizeOfTable;
     public int tableSize;
     public int countNodes;
 
     // default constructor
     public SeparateChainingHashTable(int tableSize) {
 
+        this.sentSizeOfTable = tableSize;
         this.tableSize = tableSize;
         this.countNodes = 0;
 
@@ -55,7 +55,7 @@ public class SeparateChainingHashTable {
         buckets.get(index).add(data);
         countNodes++;
 
-        if (countNodes / tableSize > 0.7f) {
+        if (((float) countNodes) / tableSize > 0.7f) {
             resize(this.tableSize*2);
         }
     }
@@ -69,16 +69,16 @@ public class SeparateChainingHashTable {
             newTable.add(new LinkedList<>());
         }
 
-        for (LinkedList<DataHashTable> bucket : buckets) {
+        ArrayList<LinkedList<DataHashTable>> oldTable = buckets;
+        this.buckets = newTable;
+        this.tableSize = sizeOfTable;
+        this.countNodes = 0;
+
+        for (LinkedList<DataHashTable> bucket : oldTable) {
             for (DataHashTable data : bucket) {
-                int updateIndex = (data.key & 0x7fffffff) % (sizeOfTable-1);
-                newTable.get(updateIndex).add(data);
+                insert(data);
             }
         }
-
-        // update after resize
-        this.tableSize = sizeOfTable;
-        this.buckets = newTable;
     }
 
     public void delete(int key) {
@@ -96,7 +96,7 @@ public class SeparateChainingHashTable {
                 }
         }
 
-        if (countNodes / tableSize < 0.3f) {
+        if (((float) countNodes) / tableSize < 0.3f) {
             resize(this.tableSize/2);
         }
     }

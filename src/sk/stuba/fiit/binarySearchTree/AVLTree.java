@@ -3,8 +3,6 @@
 
 package sk.stuba.fiit.binarySearchTree;
 
-import sk.stuba.fiit.program.Data;
-
 public class AVLTree extends BinarySearchTree {
 
     public AVLTree() {

@@ -1,6 +1,6 @@
 // Source of studying: https://cseweb.ucsd.edu/~kube/cls/100/Lectures/lec16/lec16-15.html
 
-package sk.stuba.fiit.program;
+package sk.stuba.fiit.hashTable;
 
 public class DataHashTable implements Comparable<DataHashTable> {
 

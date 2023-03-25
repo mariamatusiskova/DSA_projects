@@ -2,7 +2,7 @@
 //
 //package sk.stuba.fiit.binarySearchTree;
 //
-//import sk.stuba.fiit.program.Data;
+//import sk.stuba.fiit.binarySearchTree.Data;
 //
 //public class SplayTree extends BinarySearchTree {
 //

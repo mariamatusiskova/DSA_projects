@@ -10,8 +10,6 @@
 
 package sk.stuba.fiit.binarySearchTree;
 
-import sk.stuba.fiit.program.Data;
-
 public class BinarySearchTree {
 
     public NodeOfTheTree root;
@@ -53,7 +51,7 @@ public class BinarySearchTree {
             return false;
         }
 
-        if (actualNode.data.compareTo(searchValue) == 0) { //equal
+        if (actualNode.data.compareTo(searchValue) == 0) {
             return true;
         } else if (actualNode.data.compareTo(searchValue) > 0) {
                 return search(actualNode.left, searchValue);

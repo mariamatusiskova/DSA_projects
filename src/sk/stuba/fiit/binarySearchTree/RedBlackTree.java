@@ -3,7 +3,6 @@
 // this tree is mainly from the source I gave, I tried many pseudocode and algorithms, but only this one works for me
 
 package sk.stuba.fiit.binarySearchTree;
-import sk.stuba.fiit.program.Data;
 
 public class RedBlackTree extends BinarySearchTree {
 
