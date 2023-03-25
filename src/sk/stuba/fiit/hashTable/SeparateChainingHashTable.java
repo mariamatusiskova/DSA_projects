@@ -106,19 +106,16 @@ public class SeparateChainingHashTable {
         int index = (key & 0x7fffffff) % (tableSize-1);
 
         if (buckets.get(index) == null) {
-            System.out.println("searched key: " + key + " --> false");
             return false;
         }
 
         for (int i = 0; i < buckets.get(index).size(); i++) {
             DataHashTable currentData = buckets.get(index).get(i);
             if (key == buckets.get(index).get(i).key) {
-                System.out.println("searched data: " + currentData.key + " | " + currentData.value + " --> true");
                 return true;
             }
         }
 
-        System.out.println("searched key: " + key + " --> false");
         return false;
     }
 }
