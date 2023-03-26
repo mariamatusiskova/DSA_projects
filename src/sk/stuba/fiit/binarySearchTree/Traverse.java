@@ -1,14 +1,12 @@
 // SOURCE:
 // https://stackoverflow.com/questions/4965335/how-to-print-binary-tree-diagram-in-java
 
-package sk.stuba.fiit.program;
+package sk.stuba.fiit.binarySearchTree;
 
 import sk.stuba.fiit.binarySearchTree.BinarySearchTree;
 import sk.stuba.fiit.binarySearchTree.NodeOfTheTree;
 
 public class Traverse {
-
-    BinarySearchTree bst = new BinarySearchTree();
 
     // #### inorder tree walk --> visiting left subtree, then the root, at the end the right subtree
     // recursive method
