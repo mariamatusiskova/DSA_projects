@@ -141,6 +141,7 @@ public class AVLTree extends BinarySearchTree {
         return rebalance(actualNode);
     }
 
+
     NodeOfTheTree delete(NodeOfTheTree actualNode, Data deleteData) {
         actualNode = super.delete(actualNode, deleteData);
 

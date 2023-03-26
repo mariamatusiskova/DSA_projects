@@ -10,7 +10,9 @@ import sk.stuba.fiit.hashTable.OpenAddressingHashTable;
 import sk.stuba.fiit.hashTable.SeparateChainingHashTable;
 //import sk.stuba.fiit.binarySearchTree.SplayTree;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 public class Testing {
@@ -42,8 +44,26 @@ public class Testing {
        return 1 + (int)(Math.random() * 1000);
     }
 
+    public List<Data> generateData() {
+        List<Data> data = new ArrayList<>();
+        for (int i = 0; i < 200; i++) {
+            data.add(new Data(generateRandomString(), generateRandomNumber()));
+        }
+        return data;
+    }
+
+    public List<DataHashTable> generateDataHash() {
+        List<DataHashTable> data = new ArrayList<>();
+        for (int i = 0; i < 200; i++) {
+            data.add(new DataHashTable(generateRandomNumber(), generateRandomString()));
+        }
+        return data;
+    }
+
     // ######### Binary search tree, Adelson-Velsky Landis Tree, Red-Black Tree --> testing #########
-    public void testTreeInsertDeleteSearchIndividually(BinarySearchTree tree, int numberOfNodes) {
+    public void testTreeInsertDeleteSearchIndividually(BinarySearchTree tree, int numberOfNodes, List<Data> data) {
+
+        final int LOOP = data.size();
 
         for (int i = 0; i < numberOfNodes; i++) {
             tree.callInsert(new Data(generateRandomString(), generateRandomNumber()));
@@ -51,26 +71,37 @@ public class Testing {
 
         // insert testing
         startTime = System.nanoTime();
-        tree.callInsert(specific);
+        for (int i = 0; i < LOOP; i++) {
+            tree.callInsert(data.get(i));
+        }
         endTime = System.nanoTime();
         duration = endTime - startTime;
         System.out.println("Time taken to insert " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds ");
+        System.out.println("Average time of insert element: " + duration/LOOP + " nanoseconds");
         System.out.println();
+
+
 
         // search testing
         startTime = System.nanoTime();
-        tree.callSearch(specific);
+        for (int i = 0; i < LOOP; i++) {
+            tree.callSearch(data.get(i));
+        }
         endTime = System.nanoTime();
         duration = endTime - startTime;
         System.out.println("Time taken to search " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
+        System.out.println("Average time of search element: " + duration/LOOP + " nanoseconds");
         System.out.println();
 
         // delete testing
         startTime = System.nanoTime();
-        tree.callDelete(specific);
+        for (int i = 0; i < LOOP; i++) {
+            tree.callDelete(data.get(i));
+        }
         endTime = System.nanoTime();
         duration = endTime - startTime;
         System.out.println("Time taken to delete " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
+        System.out.println("Average time of delete element: " + duration/LOOP + " nanoseconds");
         System.out.println();
     }
 
@@ -93,7 +124,9 @@ public class Testing {
    }
 
     // ######### Separate Chaining, Linear Probing  --> testing #########
-    public void testSeparateChainingHashTableInsertDeleteSearchIndividually(SeparateChainingHashTable table, int numberOfNodes) {
+    public void testSeparateChainingHashTableInsertDeleteSearchIndividually(SeparateChainingHashTable table, int numberOfNodes, List<DataHashTable> datahash) {
+
+        final int LOOP = datahash.size();
 
         for (int i = 0; i < (table.sentSizeOfTable-1); i++) {
             table.insert(new DataHashTable(generateRandomNumber(), generateRandomString()));
@@ -101,31 +134,43 @@ public class Testing {
 
         // insert testing
         startTime = System.nanoTime();
-        table.insert(specificHashTable);
+        for (int i = 0; i < LOOP; i++) {
+            table.insert(datahash.get(i));
+        }
         endTime = System.nanoTime();
         duration = endTime - startTime;
+
         System.out.println("Time taken to insert " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
+        System.out.println("Average time of insert element: " + duration/LOOP + " nanoseconds");
         System.out.println();
 
         // search testing
         startTime = System.nanoTime();
-        table.search(specificHashTable.key);
+        for (int i = 0; i < LOOP; i++) {
+            table.search(datahash.get(i).key);
+        }
         endTime = System.nanoTime();
         duration = endTime - startTime;
         System.out.println("Time taken to search " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
+        System.out.println("Average time of search element: " + duration/LOOP + " nanoseconds");
         System.out.println();
 
         // delete testing
         startTime = System.nanoTime();
-        table.delete(specificHashTable.key);
+        for (int i = 0; i < LOOP; i++) {
+            table.delete(datahash.get(i).key);
+        }
         endTime = System.nanoTime();
         duration = endTime - startTime;
         System.out.println("Time taken to delete " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
+        System.out.println("Average time of delete element: " + duration/LOOP + " nanoseconds");
         System.out.println();
 
     }
 
-    public void testOpenAddressingHashTableInsertDeleteSearchIndividually(OpenAddressingHashTable table, int numberOfNodes) {
+    public void testOpenAddressingHashTableInsertDeleteSearchIndividually(OpenAddressingHashTable table, int numberOfNodes, List<DataHashTable> datahash) {
+
+        final int LOOP = datahash.size();
 
         for (int i = 0; i < (table.sentSizeOfTable-1); i++) {
             table.insert(new DataHashTable(generateRandomNumber(), generateRandomString()));
@@ -133,26 +178,35 @@ public class Testing {
 
         // insert testing
         startTime = System.nanoTime();
-        table.insert(specificHashTable);
+        for (int i = 0; i < LOOP; i++) {
+            table.insert(datahash.get(i));
+        }
         endTime = System.nanoTime();
         duration = endTime - startTime;
         System.out.println("Time taken to insert " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
+        System.out.println("Average time of insert element: " + duration/LOOP + " nanoseconds");
         System.out.println();
 
         // search testing
         startTime = System.nanoTime();
-        table.search(specificHashTable.key);
+        for (int i = 0; i < LOOP; i++) {
+            table.search(datahash.get(i).key);
+        }
         endTime = System.nanoTime();
         duration = endTime - startTime;
         System.out.println("Time taken to search " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
+        System.out.println("Average time of search element: " + duration/LOOP + " nanoseconds");
         System.out.println();
 
         // delete testing
         startTime = System.nanoTime();
-        table.delete(specificHashTable.key);
+        for (int i = 0; i < LOOP; i++) {
+            table.delete(datahash.get(i).key);
+        }
         endTime = System.nanoTime();
         duration = endTime - startTime;
         System.out.println("Time taken to delete " + 1 + " element from " + (numberOfNodes+1) + ": " + duration + " nanoseconds");
+        System.out.println("Average time of delete element: " + duration/LOOP + " nanoseconds");
         System.out.println();
     }
 
@@ -385,8 +439,11 @@ public class Testing {
 
         Testing test = new Testing();
 
+        // data
+        List<Data> data = test.generateData();
+        List<DataHashTable> datahash = test.generateDataHash();
+
         // size
-        int numberOfNodes_100 = 100;
         int numberOfNodes_1000 = 1000;
         int numberOfNodes_10000 = 10000;
         int numberOfNodes_100000 = 100000;
@@ -398,54 +455,47 @@ public class Testing {
         AVLTree avlTree = new AVLTree();
         RedBlackTree redBlackTree = new RedBlackTree();
 
-        System.out.println("*************** BST - testing methods individually ***************");
-        test.testTreeInsertDeleteSearchIndividually(bst, numberOfNodes_100);
-        System.out.println("*************** AVL - testing methods individually ***************");
-        test.testTreeInsertDeleteSearchIndividually(avlTree, numberOfNodes_100);
-        System.out.println("*************** RBT- testing methods individually ***************");
-        test.testTreeInsertDeleteSearchIndividually(redBlackTree, numberOfNodes_100);
-
-        System.out.println("*************** BST - testing methods individually ***************");
-        test.testTreeInsertDeleteSearchIndividually(bst, numberOfNodes_1000);
-        System.out.println("*************** AVL - testing methods individually ***************");
-        test.testTreeInsertDeleteSearchIndividually(avlTree, numberOfNodes_1000);
-        System.out.println("*************** RBT - testing methods individually ***************");
-        test.testTreeInsertDeleteSearchIndividually(redBlackTree, numberOfNodes_1000);
-
 //        System.out.println("*************** BST - testing methods individually ***************");
-//        test.testTreeInsertDeleteSearchIndividually(bst, numberOfNodes_10000;
+//        test.testTreeInsertDeleteSearchIndividually(bst, numberOfNodes_1000, data);
 //        System.out.println("*************** AVL - testing methods individually ***************");
-//        test.testTreeInsertDeleteSearchIndividually(avlTree, numberOfNodes_10000);
+//        test.testTreeInsertDeleteSearchIndividually(avlTree, numberOfNodes_1000, data);
 //        System.out.println("*************** RBT - testing methods individually ***************");
-//        test.testTreeInsertDeleteSearchIndividually(redBlackTree, numberOfNodes_10000);
+//        test.testTreeInsertDeleteSearchIndividually(redBlackTree, numberOfNodes_1000, data);
 //
 //        System.out.println("*************** BST - testing methods individually ***************");
-//        test.testTreeInsertDeleteSearchIndividually(bst, numberOfNodes_100000);
+//        test.testTreeInsertDeleteSearchIndividually(bst, numberOfNodes_10000, data);
 //        System.out.println("*************** AVL - testing methods individually ***************");
-//        test.testTreeInsertDeleteSearchIndividually(avlTree, numberOfNodes_100000);
+//        test.testTreeInsertDeleteSearchIndividually(avlTree, numberOfNodes_10000, data);
 //        System.out.println("*************** RBT - testing methods individually ***************");
-//        test.testTreeInsertDeleteSearchIndividually(redBlackTree, numberOfNodes_100000);
+//        test.testTreeInsertDeleteSearchIndividually(redBlackTree, numberOfNodes_10000, data);
 //
 //        System.out.println("*************** BST - testing methods individually ***************");
-//        test.testTreeInsertDeleteSearchIndividually(bst, numberOfNodes_1000000);
+//        test.testTreeInsertDeleteSearchIndividually(bst, numberOfNodes_100000, data);
 //        System.out.println("*************** AVL - testing methods individually ***************");
-//        test.testTreeInsertDeleteSearchIndividually(avlTree, numberOfNodes_1000000);
+//        test.testTreeInsertDeleteSearchIndividually(avlTree, numberOfNodes_100000, data);
 //        System.out.println("*************** RBT - testing methods individually ***************");
-//        test.testTreeInsertDeleteSearchIndividually(redBlackTree, numberOfNodes_1000000);
+//        test.testTreeInsertDeleteSearchIndividually(redBlackTree, numberOfNodes_100000, data);
+//
+//        System.out.println("*************** BST - testing methods individually ***************");
+//        test.testTreeInsertDeleteSearchIndividually(bst, numberOfNodes_1000000, data);
+//        System.out.println("*************** AVL - testing methods individually ***************");
+//        test.testTreeInsertDeleteSearchIndividually(avlTree, numberOfNodes_1000000, data);
+//        System.out.println("*************** RBT - testing methods individually ***************");
+//        test.testTreeInsertDeleteSearchIndividually(redBlackTree, numberOfNodes_1000000, data);
+//
+//        System.out.println("*************** BST - testing methods individually ***************");
+//        test.testTreeInsertDeleteSearchIndividually(bst, numberOfNodes_10000000, data);
+//        System.out.println("*************** AVL - testing methods individually ***************");
+//        test.testTreeInsertDeleteSearchIndividually(avlTree, numberOfNodes_10000000, data);
+//        System.out.println("*************** RBT - testing methods individually ***************");
+//        test.testTreeInsertDeleteSearchIndividually(redBlackTree, numberOfNodes_10000000, data);
 
-        System.out.println("*************** BST - testing the entire tree ***************");
-        test.testWholeTree(bst, numberOfNodes_100);
-        System.out.println("*************** AVL - testing the entire tree ***************");
-        test.testWholeTree(avlTree, numberOfNodes_100);
-        System.out.println("*************** RBT = testing the entire tree ***************");
-        test.testWholeTree(redBlackTree, numberOfNodes_100);
-
-        System.out.println("*************** BST - testing the entire tree ***************");
-        test.testWholeTree(bst, numberOfNodes_1000);
-        System.out.println("*************** AVL - testing the entire tree ***************");
-        test.testWholeTree(avlTree, numberOfNodes_1000);
-        System.out.println("*************** RBT = testing the entire tree ***************");
-        test.testWholeTree(redBlackTree, numberOfNodes_1000);
+//        System.out.println("*************** BST - testing the entire tree ***************");
+//        test.testWholeTree(bst, numberOfNodes_1000);
+//        System.out.println("*************** AVL - testing the entire tree ***************");
+//        test.testWholeTree(avlTree, numberOfNodes_1000);
+//        System.out.println("*************** RBT = testing the entire tree ***************");
+//        test.testWholeTree(redBlackTree, numberOfNodes_1000);
 
 //        System.out.println("*************** BST - testing the entire tree ***************");
 //        test.testWholeTree(bst, numberOfNodes_10000);
@@ -467,7 +517,7 @@ public class Testing {
 //        test.testWholeTree(avlTree, numberOfNodes_1000000);
 //        System.out.println("*************** RBT = testing the entire tree ***************");
 //        test.testWholeTree(redBlackTree, numberOfNodes_1000000);
-//
+////
 //        System.out.println("*************** BST - testing the entire tree ***************");
 //        test.testWholeTree(bst, numberOfNodes_10000000);
 //        System.out.println("*************** AVL - testing the entire tree ***************");
@@ -475,60 +525,53 @@ public class Testing {
 //        System.out.println("*************** RBT = testing the entire tree ***************");
 //        test.testWholeTree(redBlackTree, numberOfNodes_10000000);
 
-        test.testIfTreesAreWorkingCorrect();
+      //  test.testIfTreesAreWorkingCorrect();
 
         // hash tables
-        SeparateChainingHashTable separateChainingHashTable_100 = new SeparateChainingHashTable(numberOfNodes_100);
-        OpenAddressingHashTable openAddressingHashTable_100 = new OpenAddressingHashTable(numberOfNodes_100);
+        SeparateChainingHashTable separateChainingHashTable_1000 = new SeparateChainingHashTable(numberOfNodes_1000);
+        OpenAddressingHashTable openAddressingHashTable_1000 = new OpenAddressingHashTable(numberOfNodes_1000);
 
-        SeparateChainingHashTable separateChainingHashTable_1000 = new SeparateChainingHashTable(numberOfNodes_100);
-        OpenAddressingHashTable openAddressingHashTable_1000 = new OpenAddressingHashTable(numberOfNodes_100);
+        SeparateChainingHashTable separateChainingHashTable_10000 = new SeparateChainingHashTable(numberOfNodes_10000);
+        OpenAddressingHashTable openAddressingHashTable_10000 = new OpenAddressingHashTable(numberOfNodes_10000);
 
-        SeparateChainingHashTable separateChainingHashTable_10000 = new SeparateChainingHashTable(numberOfNodes_100);
-        OpenAddressingHashTable openAddressingHashTable_10000 = new OpenAddressingHashTable(numberOfNodes_100);
+        SeparateChainingHashTable separateChainingHashTable_100000 = new SeparateChainingHashTable(numberOfNodes_100000);
+        OpenAddressingHashTable openAddressingHashTable_100000 = new OpenAddressingHashTable(numberOfNodes_100000);
 
-        SeparateChainingHashTable separateChainingHashTable_100000 = new SeparateChainingHashTable(numberOfNodes_100);
-        OpenAddressingHashTable openAddressingHashTable_100000 = new OpenAddressingHashTable(numberOfNodes_100);
+        SeparateChainingHashTable separateChainingHashTable_1000000 = new SeparateChainingHashTable(numberOfNodes_1000000);
+        OpenAddressingHashTable openAddressingHashTable_1000000 = new OpenAddressingHashTable(numberOfNodes_1000000);
 
-        SeparateChainingHashTable separateChainingHashTable_1000000 = new SeparateChainingHashTable(numberOfNodes_100);
-        OpenAddressingHashTable openAddressingHashTable_1000000 = new OpenAddressingHashTable(numberOfNodes_100);
-
-        SeparateChainingHashTable separateChainingHashTable_10000000 = new SeparateChainingHashTable(numberOfNodes_100);
-        OpenAddressingHashTable openAddressingHashTable_10000000 = new OpenAddressingHashTable(numberOfNodes_100);
+        SeparateChainingHashTable separateChainingHashTable_10000000 = new SeparateChainingHashTable(numberOfNodes_10000000);
+        OpenAddressingHashTable openAddressingHashTable_10000000 = new OpenAddressingHashTable(numberOfNodes_10000000);
 
 
-        System.out.println("*************** Separate Chaining - testing methods individually ***************");
-        test.testSeparateChainingHashTableInsertDeleteSearchIndividually(separateChainingHashTable_100, numberOfNodes_100);
-        test.testSeparateChainingHashTableInsertDeleteSearchIndividually(separateChainingHashTable_1000, numberOfNodes_1000);
-//        test.testSeparateChainingHashTableInsertDeleteSearchIndividually(separateChainingHashTable_10000, numberOfNodes_10000);
-//        test.testSeparateChainingHashTableInsertDeleteSearchIndividually(separateChainingHashTable_100000, numberOfNodes_100000);
-//        test.testSeparateChainingHashTableInsertDeleteSearchIndividually(separateChainingHashTable_1000000, numberOfNodes_1000000);
-        test.testSeparateChainingHashTableInsertDeleteSearchIndividually(separateChainingHashTable_10000000, numberOfNodes_10000000);
+//        System.out.println("*************** Separate Chaining - testing methods individually ***************");
+//        test.testSeparateChainingHashTableInsertDeleteSearchIndividually(separateChainingHashTable_1000, numberOfNodes_1000, datahash);
+//        test.testSeparateChainingHashTableInsertDeleteSearchIndividually(separateChainingHashTable_10000, numberOfNodes_10000, datahash);
+//        test.testSeparateChainingHashTableInsertDeleteSearchIndividually(separateChainingHashTable_100000, numberOfNodes_100000, datahash);
+//        test.testSeparateChainingHashTableInsertDeleteSearchIndividually(separateChainingHashTable_1000000, numberOfNodes_1000000, datahash);
+//        test.testSeparateChainingHashTableInsertDeleteSearchIndividually(separateChainingHashTable_10000000, numberOfNodes_10000000, datahash);
+//
+//        System.out.println("*************** Linear Probing - testing methods individually ***************");
+//        test.testOpenAddressingHashTableInsertDeleteSearchIndividually(openAddressingHashTable_1000, numberOfNodes_1000, datahash);
+//        test.testOpenAddressingHashTableInsertDeleteSearchIndividually(openAddressingHashTable_10000, numberOfNodes_10000, datahash);
+//        test.testOpenAddressingHashTableInsertDeleteSearchIndividually(openAddressingHashTable_100000, numberOfNodes_100000, datahash);
+//        test.testOpenAddressingHashTableInsertDeleteSearchIndividually(openAddressingHashTable_1000000, numberOfNodes_1000000, datahash);
+//        test.testOpenAddressingHashTableInsertDeleteSearchIndividually(openAddressingHashTable_10000000, numberOfNodes_10000000, datahash);
 
-        System.out.println("*************** Linear Probing - testing methods individually ***************");
-        test.testOpenAddressingHashTableInsertDeleteSearchIndividually(openAddressingHashTable_100, numberOfNodes_100);
-        test.testOpenAddressingHashTableInsertDeleteSearchIndividually(openAddressingHashTable_1000, numberOfNodes_1000);
-//        test.testOpenAddressingHashTableInsertDeleteSearchIndividually(openAddressingHashTable_10000, numberOfNodes_10000);
-//        test.testOpenAddressingHashTableInsertDeleteSearchIndividually(openAddressingHashTable_100000, numberOfNodes_100000);
-//        test.testOpenAddressingHashTableInsertDeleteSearchIndividually(openAddressingHashTable_1000000, numberOfNodes_1000000);
-//        test.testOpenAddressingHashTableInsertDeleteSearchIndividually(openAddressingHashTable_10000000, numberOfNodes_10000000);
-
-        System.out.println("*************** Separate Chaining - testing the entire hash table ***************");
-        test.testWholeSeparateChaining(separateChainingHashTable_100, numberOfNodes_100);
-        test.testWholeSeparateChaining(separateChainingHashTable_1000, numberOfNodes_1000);
+//        System.out.println("*************** Separate Chaining - testing the entire hash table ***************");
+//        test.testWholeSeparateChaining(separateChainingHashTable_1000, numberOfNodes_1000);
 //        test.testWholeSeparateChaining(separateChainingHashTable_10000, numberOfNodes_10000);
 //        test.testWholeSeparateChaining(separateChainingHashTable_100000, numberOfNodes_100000);
 //        test.testWholeSeparateChaining(separateChainingHashTable_1000000, numberOfNodes_1000000);
 //        test.testWholeSeparateChaining(separateChainingHashTable_10000000, numberOfNodes_10000000);
 
         System.out.println("*************** Linear Probing - testing the entire hash table ***************");
-        test.testWholeLinearProbing(openAddressingHashTable_100, numberOfNodes_100);
         test.testWholeLinearProbing(openAddressingHashTable_1000, numberOfNodes_1000);
 //        test.testWholeLinearProbing(openAddressingHashTable_10000, numberOfNodes_10000);
 //        test.testWholeLinearProbing(openAddressingHashTable_100000, numberOfNodes_100000);
 //        test.testWholeLinearProbing(openAddressingHashTable_1000000, numberOfNodes_1000000);
 //        test.testWholeLinearProbing(openAddressingHashTable_10000000, numberOfNodes_10000000);
 
-        test.testIfHashTablesAreWorkingCorrect();
+       // test.testIfHashTablesAreWorkingCorrect();
     }
 }
