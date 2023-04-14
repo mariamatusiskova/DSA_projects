@@ -5,13 +5,17 @@ public class Node {
 
     // true --> 1
     private Node high;
-    private int variable;
 
-    public Node(Node low, Node high, int variable) {
+    private int level;
+    private int index;
+
+    public Node() {}
+
+    public Node(Node low, Node high, int level) {
 
         this.low = low;
         this.high = high;
-        this.variable = variable;
+        this.level = level;
     }
 
     public Node getLow() {
@@ -22,7 +26,11 @@ public class Node {
         return high;
     }
 
-    public int getVariable() {
-        return variable;
+    public int getLevel() {
+        return level;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }
