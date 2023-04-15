@@ -1,15 +1,14 @@
 package sk.stuba.fiit;// sk.stuba.fiit.ROBDD - Reduced ordered binary decision diagram
 
+import sk.stuba.fiit.Tables.ReductionTableBDD;
+import sk.stuba.fiit.Tables.StoreNodeBDD;
+
 import java.util.HashMap;
 import java.util.HashSet;
 
 public class ROBDD {
 
     public HashMap<String, Boolean> values = new HashMap<>();
-
-    HashMap<String, Boolean> t = new HashMap<>();
-    HashMap<String, Boolean> h = new HashMap<>();
-
     private Node root;
 
     public ROBDD(Node root) {
@@ -56,6 +55,19 @@ public class ROBDD {
     public char BDD_use(ROBDD bdd, String inputs) {
 
         return 'a';
+    }
+
+    public Node checkReductionBDD(Node low, Node high, int level, StoreNodeBDD storeTable, ReductionTableBDD reductionTable) {
+
+        if (low == high) {
+            return low;
+        } else if (reductionTable.check(low, high, level)) {
+            return reductionTable.search(low, high, level);
+        } else {
+            Node node = storeTable.insert(low, high, level);
+            reductionTable.insert(low, high, level, node);
+            return node;
+        }
     }
 
 }

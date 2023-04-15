@@ -24,8 +24,8 @@ public class ReductionTableBDD {
         return table.get(key);
     }
 
-    public void insert(Node low, Node high, int level, Node u) {
+    public void insert(Node low, Node high, int level, Node node) {
         String key = low.getLevel() + "," + high.getLevel() + "," + level;
-        table.put(key, u);
+        table.put(key, node);
     }
 }
