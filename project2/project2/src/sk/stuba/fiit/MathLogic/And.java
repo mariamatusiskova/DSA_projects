@@ -1,4 +1,4 @@
-package MathLogic;
+package sk.stuba.fiit.MathLogic;
 
 import java.util.HashMap;
 

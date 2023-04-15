@@ -1,3 +1,5 @@
+package sk.stuba.fiit;
+
 public class Node {
 
     // false --> 0

@@ -1,7 +1,6 @@
-package MathLogic;
+package sk.stuba.fiit.MathLogic;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class Not extends Expression {
 

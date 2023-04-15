@@ -1,10 +1,14 @@
-// ROBDD - Reduced ordered binary decision diagram
+package sk.stuba.fiit;// sk.stuba.fiit.ROBDD - Reduced ordered binary decision diagram
 
 import java.util.HashMap;
+import java.util.HashSet;
 
 public class ROBDD {
 
     public HashMap<String, Boolean> values = new HashMap<>();
+
+    HashMap<String, Boolean> t = new HashMap<>();
+    HashMap<String, Boolean> h = new HashMap<>();
 
     private Node root;
 
@@ -13,6 +17,14 @@ public class ROBDD {
     }
 
     public Node BDD_create(String bfunction, String order) {
+
+        HashSet<Character> countVariables = new HashSet<>();
+        for (char c : bfunction.toCharArray()) {
+            if(Character.isLetter(c)) {
+                countVariables.add(c);
+            }
+        }
+        int numberOfVariables = countVariables.size();
 
         Node node = new Node();
 
