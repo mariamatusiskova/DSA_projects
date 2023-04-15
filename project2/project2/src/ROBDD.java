@@ -1,6 +1,10 @@
 // ROBDD - Reduced ordered binary decision diagram
 
+import java.util.HashMap;
+
 public class ROBDD {
+
+    public HashMap<String, Boolean> values = new HashMap<>();
 
     private Node root;
 
