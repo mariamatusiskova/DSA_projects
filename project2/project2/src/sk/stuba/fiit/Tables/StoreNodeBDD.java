@@ -13,8 +13,8 @@ public class StoreNodeBDD {
         table = new HashMap<>();
         // initialization of table with terminal nodes 0 and 1
         // string, node --> low, high, level
-        table.put("0,0,0", new Node(null, null, -1));
-        table.put("0,0,1", new Node(null, null, -1));
+        table.put("0,0,0", new Node(null, null, 0));
+        table.put("0,0,1", new Node(null, null, 1));
     }
 
     public Node insert(Node low, Node high, int level) {

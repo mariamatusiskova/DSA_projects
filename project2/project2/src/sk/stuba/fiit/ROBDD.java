@@ -1,5 +1,7 @@
 package sk.stuba.fiit;// sk.stuba.fiit.ROBDD - Reduced ordered binary decision diagram
 
+import sk.stuba.fiit.MathLogic.Expression;
+import sk.stuba.fiit.MathLogic.Or;
 import sk.stuba.fiit.Tables.ReductionTableBDD;
 import sk.stuba.fiit.Tables.StoreNodeBDD;
 
@@ -8,6 +10,16 @@ import java.util.HashSet;
 
 public class ROBDD {
 
+    private int numberOfVariables;
+
+    // table for storing nodes
+    private StoreNodeBDD storeTable;
+
+    // ensure if BDD is reduces --> store only new nodes
+    private ReductionTableBDD reductionTable;
+    private String order;
+    private String bfunction;
+
     public HashMap<String, Boolean> values = new HashMap<>();
     private Node root;
 
@@ -15,36 +27,43 @@ public class ROBDD {
         this.root = root;
     }
 
-    public Node BDD_create(String bfunction, String order) {
+    public ROBDD(String bfunction, String order) {
+
+        this.storeTable = new StoreNodeBDD();
+        this.reductionTable = new ReductionTableBDD();
+        this.order = order;
+        this.bfunction = bfunction;
+    }
+
+    public Node callBDD_create() {
+        return BDD_create(bfunction, "1");
+    }
+
+    private Node BDD_create(String bfunction, String order) {
+
+        Expression expr = new Or(bfunction);
+        expr.evaluate(values);
+
+        int orderInt = 0;
+        try {
+            orderInt = Integer.parseInt(order);
+        } catch (NumberFormatException e) {
+            System.out.println("The string is not a valid integer");
+        }
 
         HashSet<Character> countVariables = new HashSet<>();
         for (char c : bfunction.toCharArray()) {
-            if(Character.isLetter(c)) {
+            if (Character.isLetter(c)) {
                 countVariables.add(c);
             }
         }
-        int numberOfVariables = countVariables.size();
+        this.numberOfVariables = countVariables.size();
 
-        Node node = new Node();
-
-        // TODO:change
-        int orderN = 1;
-        int n = 0;
-
-        boolean value = false;
-        //
-
-        if (orderN > n) {
-            if (value == false) {
-                return node.getLow();
-            } else {
-                return node.getHigh();
-            }
-        } else {
-            Node v0 = BDD_create("seva", "abc");
-            Node v1 = BDD_create("bleh", "frrr");
-            return node;
+        if (orderInt > this.numberOfVariables) {
+            return bfunction.isFalse() ? T.getFalseNode() : T.getTrueNode();
         }
+
+        return null;
     }
 
     public ROBDD BDD_create_with_best_order(String bfunction) {
