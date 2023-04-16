@@ -30,4 +30,9 @@ public class And extends LogicFunction {
         }
         return true;
     }
+
+    @Override
+    public Expression replace(String variable, Boolean bool) {
+        return null;
+    }
 }

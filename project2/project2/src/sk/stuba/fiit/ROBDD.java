@@ -17,7 +17,6 @@ public class ROBDD {
 
     // ensure if BDD is reduces --> store only new nodes
     private ReductionTableBDD reductionTable;
-    private String order;
     private String bfunction;
 
     public HashMap<String, Boolean> values = new HashMap<>();
@@ -27,43 +26,38 @@ public class ROBDD {
         this.root = root;
     }
 
-    public ROBDD(String bfunction, String order) {
-
-        this.storeTable = new StoreNodeBDD();
-        this.reductionTable = new ReductionTableBDD();
-        this.order = order;
+    public ROBDD(String bfunction) {
         this.bfunction = bfunction;
     }
 
-    public Node callBDD_create() {
-        return BDD_create(bfunction, "1");
+    public Node BDD_create(String bfunction, String order) {
+        return BDD_create_helper(bfunction, order, 0);
     }
 
-    private Node BDD_create(String bfunction, String order) {
+    private Node BDD_create_helper(String bfunction, String order, int variableIndex) {
 
-        Expression expr = new Or(bfunction);
+        Or or = new Or(bfunction);
 
-        int orderInt = 0;
-        try {
-            orderInt = Integer.parseInt(order);
-        } catch (NumberFormatException e) {
-            System.out.println("The string is not a valid integer");
-        }
+        this.numberOfVariables = countVariables(bfunction);
 
-        HashSet<Character> countVariables = new HashSet<>();
-        for (char c : bfunction.toCharArray()) {
-            if (Character.isLetter(c)) {
-                countVariables.add(c);
-            }
-        }
-        this.numberOfVariables = countVariables.size();
+        if (variableIndex > this.numberOfVariables) {
+            boolean value = or.evaluate(values);
+            return value ? new Node(1, null, null, null) : new Node(0, null, null, null);
+        } else {
 
-        if (orderInt > this.numberOfVariables) {
-            boolean value = expr.evaluate(values);
-            return value ? new Node(null, null, 1) : new Node(null, null, 0);
         }
 
         return null;
+    }
+
+    private Integer countVariables(String bfunction) {
+        HashSet<Character> variables = new HashSet<>();
+        for (char c : bfunction.toCharArray()) {
+            if (Character.isLetter(c)) {
+                variables.add(c);
+            }
+        }
+        return variables.size();
     }
 
     public ROBDD BDD_create_with_best_order(String bfunction) {
@@ -76,15 +70,19 @@ public class ROBDD {
         return 'a';
     }
 
-    public Node checkReductionBDD(Node low, Node high, int level, StoreNodeBDD storeTable, ReductionTableBDD reductionTable) {
+    public Node checkReductionBDD(Node node, StoreNodeBDD storeTable, ReductionTableBDD reductionTable) {
 
-        if (low == high) {
-            return low;
-        } else if (reductionTable.check(low, high, level)) {
-            return reductionTable.search(low, high, level);
+        int indexOfNode;
+
+        if (node.getLow() == node.getHigh()) {
+            return node.getLow();
+        } else if (reductionTable.check(node)) {
+            indexOfNode = reductionTable.search(node);
+            return storeTable.search(indexOfNode);
         } else {
-            Node node = storeTable.insert(low, high, level);
-            reductionTable.insert(low, high, level, node);
+            Node newNode = storeTable.insert(node);
+            indexOfNode = storeTable.getSize() - 1;
+            reductionTable.insert(indexOfNode, newNode);
             return node;
         }
     }

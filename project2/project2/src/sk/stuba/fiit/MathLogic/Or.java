@@ -26,4 +26,9 @@ public class Or extends LogicFunction {
         }
         return false;
     }
+
+    @Override
+    public Expression replace(String variable, Boolean bool) {
+        return null;
+    }
 }

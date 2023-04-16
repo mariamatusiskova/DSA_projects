@@ -2,7 +2,7 @@ package sk.stuba.fiit.MathLogic;
 
 import java.util.HashMap;
 
-public class Variable extends LogicFunction {
+public class Variable extends Expression {
 
     private String name;
 

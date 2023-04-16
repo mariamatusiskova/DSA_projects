@@ -11,26 +11,30 @@ public class StoreNodeBDD {
     Map<Integer, Node> table;
 
     // TODO: Expression???
-    public StoreNodeBDD(int numberOfVariables) {
+    public StoreNodeBDD(int numberOfVariables, Node node) {
         table = new HashMap<>();
         // initialization of table with terminal nodes 0 and 1
         // string, node --> low, high, level
-        table.put(0, new Node(numberOfVariables, null, null, null));
-        table.put(1, new Node(numberOfVariables, null, null, null));
+        table.put(0, node);
+        table.put(1, node);
     }
 
-    public Node insert(int variableIndex, Node low, Node high, Expression expression) {
+    public Node insert(Node node) {
 
         Integer key = table.size();
 
         if (table.containsKey(key)) {
             return table.get(key);
         } else {
-            Node newNode = new Node(variableIndex, low, high, expression);
+            Node newNode = node;
             table.put(key, newNode);
             return newNode;
         }
     }
+
+    public int getSize() {
+        return table.size();
+    };
 
     public Node search(int indexOfNode) {
         return table.get(indexOfNode);
