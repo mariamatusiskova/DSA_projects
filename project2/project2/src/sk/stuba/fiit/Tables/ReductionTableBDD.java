@@ -7,25 +7,24 @@ import java.util.Map;
 
 public class ReductionTableBDD {
 
-    Map<String, Node> table;
+    Map<Node, Integer> table;
 
     public ReductionTableBDD() {
-        // empty
         table = new HashMap<>();
     }
 
-    public boolean check(Node low, Node high, int level) {
-        String key = low.getLevel() + "," + high.getLevel() + "," + level;
+    public boolean check(Node node) {
+        Node key = node;
         return table.containsKey(key);
     }
 
-    public Node search(Node low, Node high, int level) {
-        String key = low.getLevel() + "," + high.getLevel() + "," + level;
+    public Integer search(Node node) {
+        Node key = node;
         return table.get(key);
     }
 
-    public void insert(Node low, Node high, int level, Node node) {
-        String key = low.getLevel() + "," + high.getLevel() + "," + level;
-        table.put(key, node);
+    public void insert(int indexOfNode, Node node) {
+        Node key = node;
+        table.put(key, indexOfNode);
     }
 }

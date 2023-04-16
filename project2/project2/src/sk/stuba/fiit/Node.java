@@ -1,23 +1,25 @@
 package sk.stuba.fiit;
 
+import sk.stuba.fiit.MathLogic.Expression;
+
+import java.util.Objects;
+
 public class Node {
 
     // false --> 0
     private Node low;
-
     // true --> 1
     private Node high;
-
-    private int level;
-    private int index;
-
+    int variableIndex;
+    private Expression expression;
     public Node() {}
 
-    public Node(Node low, Node high, int level) {
+    public Node(int variableIndex, Node low, Node high, Expression expression) {
 
         this.low = low;
         this.high = high;
-        this.level = level;
+        this.variableIndex = variableIndex;
+        this.expression = expression;
     }
 
     public Node getLow() {
@@ -28,11 +30,24 @@ public class Node {
         return high;
     }
 
-    public int getLevel() {
-        return level;
+    public int getVariableIndex() {
+        return variableIndex;
     }
 
-    public int getIndex() {
-        return index;
+    public Expression getExpression() {
+        return expression;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return variableIndex == node.variableIndex && Objects.equals(low, node.low) && Objects.equals(high, node.high);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(low, high, variableIndex);
     }
 }

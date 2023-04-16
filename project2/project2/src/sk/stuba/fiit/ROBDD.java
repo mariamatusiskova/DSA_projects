@@ -42,7 +42,6 @@ public class ROBDD {
     private Node BDD_create(String bfunction, String order) {
 
         Expression expr = new Or(bfunction);
-        expr.evaluate(values);
 
         int orderInt = 0;
         try {
@@ -60,7 +59,8 @@ public class ROBDD {
         this.numberOfVariables = countVariables.size();
 
         if (orderInt > this.numberOfVariables) {
-            return bfunction.isFalse() ? T.getFalseNode() : T.getTrueNode();
+            boolean value = expr.evaluate(values);
+            return value ? new Node(null, null, 1) : new Node(null, null, 0);
         }
 
         return null;
