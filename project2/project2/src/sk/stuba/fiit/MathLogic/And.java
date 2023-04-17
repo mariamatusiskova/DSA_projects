@@ -1,11 +1,17 @@
 package sk.stuba.fiit.MathLogic;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class And extends LogicFunction {
 
     public And(String input) {
         parseInput(input);
+    }
+
+    public And(List<Expression> children) {
+        this.children = children;
     }
 
     @Override
@@ -22,7 +28,7 @@ public class And extends LogicFunction {
     }
 
     @Override
-    public boolean evaluate(HashMap<String, Boolean> values) {
+    public Boolean evaluate(HashMap<String, Boolean> values) {
         for (Expression child: children) {
             if (!child.evaluate(values)){
                 return false;
@@ -31,8 +37,16 @@ public class And extends LogicFunction {
         return true;
     }
 
-    @Override
-    public Expression replace(String variable, Boolean bool) {
-        return null;
+    public static And reduce(String variable, HashMap<String, Boolean> values, And and) {
+
+        List<Expression> expr = new ArrayList<>();
+
+        for (Expression child: and.children) {
+            if (child.evaluate(values)) {
+                expr.add(child);
+            }
+        }
+
+        return new And(expr);
     }
 }

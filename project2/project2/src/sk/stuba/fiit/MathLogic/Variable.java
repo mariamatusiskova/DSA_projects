@@ -14,7 +14,7 @@ public class Variable extends Expression {
     }
 
     @Override
-    public boolean evaluate(HashMap<String, Boolean> values) {
+    public Boolean evaluate(HashMap<String, Boolean> values) {
         return values.get(name);
     }
 

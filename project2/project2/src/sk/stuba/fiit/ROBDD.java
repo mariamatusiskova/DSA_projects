@@ -1,6 +1,5 @@
 package sk.stuba.fiit;// sk.stuba.fiit.ROBDD - Reduced ordered binary decision diagram
 
-import sk.stuba.fiit.MathLogic.Expression;
 import sk.stuba.fiit.MathLogic.Or;
 import sk.stuba.fiit.Tables.ReductionTableBDD;
 import sk.stuba.fiit.Tables.StoreNodeBDD;
@@ -38,7 +37,7 @@ public class ROBDD {
 
         Or or = new Or(bfunction);
 
-        this.numberOfVariables = countVariables(bfunction);
+        this.numberOfVariables = countAndStoreVariables(bfunction);
 
         if (variableIndex > this.numberOfVariables) {
             boolean value = or.evaluate(values);
@@ -50,11 +49,12 @@ public class ROBDD {
         return null;
     }
 
-    private Integer countVariables(String bfunction) {
+    private Integer countAndStoreVariables(String bfunction) {
         HashSet<Character> variables = new HashSet<>();
         for (char c : bfunction.toCharArray()) {
             if (Character.isLetter(c)) {
                 variables.add(c);
+                values.put(c + "", null);
             }
         }
         return variables.size();
