@@ -26,33 +26,37 @@ public class Or extends LogicFunction {
 
     @Override
     public Boolean evaluate(HashMap<String, Boolean> values) {
+        boolean areChildrenAreNull = true;
         for (Expression child: children) {
             if(child.evaluate(values)){
                 return true;
+            } else if(child.evaluate(values) != null){
+                areChildrenAreNull = false;
             }
         }
-        return false;
+        return areChildrenAreNull ? null : false;
     }
 
-    public static Or replace(String variable, HashMap<String, Boolean> values, Or or, Boolean bool) {
+    public void replace(String variable, HashMap<String, Boolean> values, Boolean bool) {
 
-        List<Expression> expr = new ArrayList<>();
+        List<Expression> newChildren = new ArrayList<>();
 
         values.put(variable, bool);
 
-        for (Expression child: or.children) {
-            if (child.evaluate(values)) {
-                expr.add(child);
+        for (Expression child: children) {
+            if (child.evaluate(values) || child.evaluate(values) == null) {
+                newChildren.add(child);
             }
         }
 
-        for (int i = 0; i < expr.size(); i++) {
-            And and = (And) expr.get(i);
-            expr.set(i, And.reduce(variable, values, and));
+        for (int i = 0; i < newChildren.size(); i++) {
+            And and = (And) newChildren.get(i);
+            and.reduce(values);
         }
 
         values.put(variable, null);
-
-        return new Or(expr);
+        children = newChildren;
     }
+
+
 }

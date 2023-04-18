@@ -29,24 +29,32 @@ public class And extends LogicFunction {
 
     @Override
     public Boolean evaluate(HashMap<String, Boolean> values) {
+        boolean allChildrenAreNull = true;
         for (Expression child: children) {
             if (!child.evaluate(values)){
                 return false;
+            } else if (child.evaluate(values) != null) {
+                allChildrenAreNull = false;
             }
         }
-        return true;
+        return allChildrenAreNull ? null : true;
     }
 
-    public static And reduce(String variable, HashMap<String, Boolean> values, And and) {
+    public void reduce(HashMap<String, Boolean> values) {
 
-        List<Expression> expr = new ArrayList<>();
+        List<Expression> newChildren = new ArrayList<>();
 
-        for (Expression child: and.children) {
-            if (child.evaluate(values)) {
-                expr.add(child);
+        //values.put(variable, bool);
+
+        for (Expression child: children) {
+            // reduce true variables
+            if (child.evaluate(values) == false || child.evaluate(values) == null) {  // !child.evaluate(values)
+                newChildren.add(child);
             }
         }
 
-        return new And(expr);
+        //values.put(variable, null);
+
+        children = newChildren;
     }
 }

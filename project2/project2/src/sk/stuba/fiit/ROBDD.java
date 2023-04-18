@@ -1,6 +1,8 @@
 package sk.stuba.fiit;// sk.stuba.fiit.ROBDD - Reduced ordered binary decision diagram
 
+import sk.stuba.fiit.MathLogic.Expression;
 import sk.stuba.fiit.MathLogic.Or;
+import sk.stuba.fiit.MathLogic.Variable;
 import sk.stuba.fiit.Tables.ReductionTableBDD;
 import sk.stuba.fiit.Tables.StoreNodeBDD;
 
@@ -27,26 +29,37 @@ public class ROBDD {
 
     public ROBDD(String bfunction) {
         this.bfunction = bfunction;
+        this.numberOfVariables = countAndStoreVariables(bfunction);
+        this.storeTable = new StoreNodeBDD(numberOfVariables, new Node(numberOfVariables-1, null, null, null));
+        this.reductionTable = new ReductionTableBDD();
     }
 
     public Node BDD_create(String bfunction, String order) {
-        return BDD_create_helper(bfunction, order, 0);
+        return BDD_create_helper(new Or(bfunction), order, 0);
     }
 
-    private Node BDD_create_helper(String bfunction, String order, int variableIndex) {
+    private Node BDD_create_helper(Or or, String order, int variableIndex) {
 
-        Or or = new Or(bfunction);
+//        Or.replace(, values, or, false);
+//        Or.replace(order, values, or, true);
 
-        this.numberOfVariables = countAndStoreVariables(bfunction);
 
         if (variableIndex > this.numberOfVariables) {
             boolean value = or.evaluate(values);
-            return value ? new Node(1, null, null, null) : new Node(0, null, null, null);
+            return new Node(0, null, null, new Variable(value + ""));
         } else {
 
-        }
+            Or orZero = new Or(or.getChildren());
+            orZero.replace(order.charAt(variableIndex) + "", values, false);
 
-        return null;
+            Or orOne = new Or(or.getChildren());
+            orOne.replace(order.charAt(variableIndex) + "", values, true);
+
+            Node nodeZero = BDD_create_helper(orZero, order, variableIndex + 1);
+            Node nodeOne = BDD_create_helper(orOne, order, variableIndex + 1);
+
+            return checkReductionBDD(new Node(variableIndex, nodeZero, nodeOne, or), storeTable, reductionTable);
+        }
     }
 
     private Integer countAndStoreVariables(String bfunction) {

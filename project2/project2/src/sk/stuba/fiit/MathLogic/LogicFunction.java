@@ -6,5 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class LogicFunction extends Expression {
-    List<Expression> children;
+    protected List<Expression> children;
+
+    public List<Expression> getChildren() {
+        return children;
+    }
 }
