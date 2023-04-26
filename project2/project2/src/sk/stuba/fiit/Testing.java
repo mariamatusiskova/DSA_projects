@@ -8,8 +8,8 @@ public class Testing {
 
     public static void main(String[] args) throws IOException {
 
-        ROBDD robdd = new ROBDD("A.B.C+B.C+E.F");
-        robdd.BDD_create_with_best_order("A.B.C+B.C+E.F");
+        ROBDD robdd = new ROBDD("A.!C + A.B.C + !A.B + !B.C");
+        robdd.BDD_create_with_best_order("A.!C + A.B.C + !A.B + !B.C");
 
       //  BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 

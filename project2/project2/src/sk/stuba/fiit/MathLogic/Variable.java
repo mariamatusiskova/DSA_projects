@@ -5,8 +5,13 @@ import java.util.HashMap;
 public class Variable extends Expression {
 
     private String name;
+    private Boolean lastNodeValue = null;
 
     public Variable(String input) { parseInput(input); }
+
+    public Variable(boolean lastNodeValue) {
+        this.lastNodeValue = lastNodeValue;
+    }
 
     @Override
     public void parseInput(String input) {
@@ -15,6 +20,11 @@ public class Variable extends Expression {
 
     @Override
     public Boolean evaluate(HashMap<String, Boolean> values) {
+
+        if (lastNodeValue != null) {
+            return lastNodeValue;
+        }
+
         return values.get(name);
     }
 

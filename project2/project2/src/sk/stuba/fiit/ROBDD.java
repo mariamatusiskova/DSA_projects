@@ -45,13 +45,14 @@ public class ROBDD {
 
         if (variableIndex > this.numberOfVariables-1) {
 
-            boolean value = false;
+            Boolean value = or.evaluate(values);
 
-            if (or.evaluate(values) != null) {
-                value = or.evaluate(values);
+            if (value != null && value == false) {
+                return new Node(0, null, null, new Variable(false));
+            } else {
+                return new Node(0, null, null, new Variable(true));
             }
 
-            return new Node(0, null, null, new Variable(value + ""));
         } else {
 
             Or orZero = new Or(or.getChildren());
@@ -99,8 +100,9 @@ public class ROBDD {
 
         // linear ordering
 
+        // TODO: check this condition
         if (variables.isEmpty()) {
-            // TODO
+            return null;
         }
 
         String order = stringifyVariables();
@@ -112,17 +114,22 @@ public class ROBDD {
         for (int i = 0; i < order.length(); i++) {
 
             order = order.substring(1) + order.substring(0, 1);
-            System.out.println(order);
 
             ROBDD currentBdd = new ROBDD(bfunction);
             currentBdd.BDD_create(bfunction, order);
+            System.out.println(order);
 
-            int countNodes = currentBdd.reductionTable.countNodes();
+            int countNodes = currentBdd.storeTable.countNodes();
+            System.out.println("no of nodes: " + countNodes);
+
             if (countNodes < finalNodes) {
                 finalNodes = countNodes;
                 finalBDD = currentBdd;
+                System.out.println("best order: " + order);
             }
         }
+
+        System.out.println(finalBDD.root.getVariableIndex());
 
         return finalBDD.root;
     }

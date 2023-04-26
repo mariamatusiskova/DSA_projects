@@ -25,9 +25,14 @@ public class Or extends LogicFunction {
 
     @Override
     public Boolean evaluate(HashMap<String, Boolean> values) {
-        boolean allChildrenAreNull = true;
-        for (Expression child: children) {
 
+        boolean allChildrenAreNull = true;
+
+        if (children.isEmpty()) {
+            return false;
+        }
+
+        for (Expression child: children) {
             if (child.evaluate(values) != null) {
                 if (child.evaluate(values)) {
                     return true;

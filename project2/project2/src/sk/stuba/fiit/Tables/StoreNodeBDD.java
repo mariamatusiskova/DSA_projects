@@ -13,7 +13,6 @@ public class StoreNodeBDD {
     public StoreNodeBDD(Node node) {
         table = new HashMap<>();
         // initialization of table with terminal nodes 0 and 1
-        // string, node --> low, high, level
         table.put(0, node);
         table.put(1, node);
     }
@@ -37,5 +36,9 @@ public class StoreNodeBDD {
 
     public Node search(int indexOfNode) {
         return table.get(indexOfNode);
+    }
+
+    public int countNodes() {
+        return table.size();
     }
 }
