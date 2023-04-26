@@ -17,7 +17,7 @@ public class Or extends LogicFunction {
     @Override
     public void parseInput(String input) {
 
-        String[] splitInput = input.split("\\+");
+        String[] splitInput = input.trim().split("\\+");
         for (String str : splitInput) {
             children.add(new And(str));
         }
@@ -33,8 +33,9 @@ public class Or extends LogicFunction {
         }
 
         for (Expression child: children) {
-            if (child.evaluate(values) != null) {
-                if (child.evaluate(values)) {
+            Boolean value = child.evaluate(values);
+            if (value != null) {
+                if (value) {
                     return true;
                 }
                 allChildrenAreNull = false;

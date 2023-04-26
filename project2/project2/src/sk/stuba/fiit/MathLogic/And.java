@@ -17,9 +17,9 @@ public class And extends LogicFunction {
     @Override
     public void parseInput(String input) {
 
-        String[] splitInput = input.split("\\.");
+        String[] splitInput = input.trim().split("\\.");
         for (String str : splitInput) {
-            if (input.startsWith("!")) {
+            if (str.startsWith("!")) {
                 children.add(new Not(str));
             } else {
                 children.add(new Variable(str));
@@ -36,8 +36,11 @@ public class And extends LogicFunction {
         }
 
         for (Expression child: children) {
-            if (child.evaluate(values) != null) {
-                if (!child.evaluate(values)) {
+
+            Boolean value = child.evaluate(values);
+
+            if (value != null) {
+                if (!value) {
                     return false;
                 }
                 allChildrenAreNull = false;
