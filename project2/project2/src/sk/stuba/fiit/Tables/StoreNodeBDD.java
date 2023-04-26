@@ -10,8 +10,7 @@ public class StoreNodeBDD {
 
     Map<Integer, Node> table;
 
-    // TODO: Expression???
-    public StoreNodeBDD(int numberOfVariables, Node node) {
+    public StoreNodeBDD(Node node) {
         table = new HashMap<>();
         // initialization of table with terminal nodes 0 and 1
         // string, node --> low, high, level

@@ -21,20 +21,20 @@ public class Or extends LogicFunction {
         for (String str : splitInput) {
             children.add(new And(str));
         }
-
     }
 
     @Override
     public Boolean evaluate(HashMap<String, Boolean> values) {
-        boolean areChildrenAreNull = true;
+        boolean allChildrenAreNull = true;
         for (Expression child: children) {
             if(child.evaluate(values)){
                 return true;
             } else if(child.evaluate(values) != null){
-                areChildrenAreNull = false;
+                allChildrenAreNull = false;
             }
         }
-        return areChildrenAreNull ? null : false;
+
+        return allChildrenAreNull ? null : false;
     }
 
     public void replace(String variable, HashMap<String, Boolean> values, Boolean bool) {
@@ -44,7 +44,7 @@ public class Or extends LogicFunction {
         values.put(variable, bool);
 
         for (Expression child: children) {
-            if (child.evaluate(values) || child.evaluate(values) == null) {
+            if (child.evaluate(values) == null || child.evaluate(values)) {
                 newChildren.add(child);
             }
         }
@@ -57,6 +57,5 @@ public class Or extends LogicFunction {
         values.put(variable, null);
         children = newChildren;
     }
-
 
 }

@@ -31,12 +31,14 @@ public class And extends LogicFunction {
     public Boolean evaluate(HashMap<String, Boolean> values) {
         boolean allChildrenAreNull = true;
         for (Expression child: children) {
-            if (!child.evaluate(values)){
-                return false;
-            } else if (child.evaluate(values) != null) {
+            if (child.evaluate(values) != null) {
+                if (!child.evaluate(values)) {
+                    return false;
+                }
                 allChildrenAreNull = false;
             }
         }
+
         return allChildrenAreNull ? null : true;
     }
 
@@ -44,16 +46,12 @@ public class And extends LogicFunction {
 
         List<Expression> newChildren = new ArrayList<>();
 
-        //values.put(variable, bool);
-
         for (Expression child: children) {
             // reduce true variables
-            if (child.evaluate(values) == false || child.evaluate(values) == null) {  // !child.evaluate(values)
+            if (child.evaluate(values) == null || child.evaluate(values) == false) {  // !child.evaluate(values)
                 newChildren.add(child);
             }
         }
-
-        //values.put(variable, null);
 
         children = newChildren;
     }
