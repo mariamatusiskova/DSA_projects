@@ -9,4 +9,8 @@ public abstract class LogicFunction extends Expression {
     public List<Expression> getChildren() {
         return children;
     }
+
+    public void setChildren(List<Expression> newChildren) {
+        children = newChildren;
+    }
 }

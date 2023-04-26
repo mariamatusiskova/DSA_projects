@@ -6,8 +6,10 @@ import sk.stuba.fiit.MathLogic.Variable;
 import sk.stuba.fiit.Tables.ReductionTableBDD;
 import sk.stuba.fiit.Tables.StoreNodeBDD;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public class ROBDD {
 
@@ -55,11 +57,17 @@ public class ROBDD {
 
         } else {
 
+            List<Expression> exprZero = new ArrayList<>();
+            List<Expression> exprOne = new ArrayList<>();
+
             Or orZero = new Or(or.getChildren());
-            orZero.replace(order.charAt(variableIndex) + "", values, false);
+            exprZero = orZero.replace(order.charAt(variableIndex) + "", values, false);
 
             Or orOne = new Or(or.getChildren());
-            orOne.replace(order.charAt(variableIndex) + "", values, true);
+            exprOne = orOne.replace(order.charAt(variableIndex) + "", values, true);
+
+            orZero.setChildren(exprZero);
+            orOne.setChildren(exprOne);
 
             Node nodeZero = BDD_create_helper(orZero, order, variableIndex + 1);
             Node nodeOne = BDD_create_helper(orOne, order, variableIndex + 1);

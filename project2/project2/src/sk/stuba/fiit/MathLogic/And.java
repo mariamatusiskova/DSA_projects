@@ -17,7 +17,7 @@ public class And extends LogicFunction {
     @Override
     public void parseInput(String input) {
 
-        String[] splitInput = input.trim().split("\\.");
+        String[] splitInput = input.trim().split("\\s*\\.\\s*");
         for (String str : splitInput) {
             if (str.startsWith("!")) {
                 children.add(new Not(str));
@@ -50,17 +50,21 @@ public class And extends LogicFunction {
         return allChildrenAreNull ? null : true;
     }
 
-    public void reduce(HashMap<String, Boolean> values) {
+    public Expression reduce(HashMap<String, Boolean> values) {
 
         List<Expression> newChildren = new ArrayList<>();
 
         for (Expression child: children) {
+
             // reduce true variables
-            if (child.evaluate(values) == null || child.evaluate(values) == false) {  // !child.evaluate(values)
+            Boolean value = child.evaluate(values);
+            if (value == null || value == false) {
                 newChildren.add(child);
             }
         }
 
-        children = newChildren;
+        Expression combinedExpression =  new And(newChildren);
+
+        return combinedExpression;
     }
 }
