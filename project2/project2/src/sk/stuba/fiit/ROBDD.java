@@ -44,7 +44,13 @@ public class ROBDD {
     private Node BDD_create_helper(Or or, String order, int variableIndex) {
 
         if (variableIndex > this.numberOfVariables-1) {
-            boolean value = or.evaluate(values);
+
+            boolean value = false;
+
+            if (or.evaluate(values) != null) {
+                value = or.evaluate(values);
+            }
+
             return new Node(0, null, null, new Variable(value + ""));
         } else {
 
