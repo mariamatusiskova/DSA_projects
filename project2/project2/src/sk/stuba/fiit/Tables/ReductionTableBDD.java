@@ -27,4 +27,9 @@ public class ReductionTableBDD {
         Node key = node;
         table.put(key, indexOfNode);
     }
+
+    // TODO
+    public int countNodes() {
+        return table.size();
+    }
 }

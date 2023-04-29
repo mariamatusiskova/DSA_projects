@@ -11,6 +11,10 @@ public class Testing {
         ROBDD robdd = new ROBDD("A.!C + A.B.C + !A.B + !B.C");
         robdd.BDD_create_with_best_order("A.!C + A.B.C + !A.B + !B.C");
 
+        for (int i = 0; i < robdd.storeTable.getSize(); i++) {
+            System.out.println(robdd.storeTable.search(i).getVariableIndex());
+        }
+
       //  BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
         // Reading data using readLine

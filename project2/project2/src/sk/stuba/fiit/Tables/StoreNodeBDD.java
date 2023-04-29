@@ -38,6 +38,7 @@ public class StoreNodeBDD {
         return table.get(indexOfNode);
     }
 
+    // TODO
     public int countNodes() {
         return table.size();
     }

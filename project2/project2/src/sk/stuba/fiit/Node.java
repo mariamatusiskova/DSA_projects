@@ -26,6 +26,14 @@ public class Node {
         return low;
     }
 
+    public void setLow(Node low) {
+        this.low = low;
+    }
+
+    public void setHigh(Node high) {
+        this.high = high;
+    }
+
     public Node getHigh() {
         return high;
     }
