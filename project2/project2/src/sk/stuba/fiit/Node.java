@@ -12,6 +12,7 @@ public class Node {
     private Node high;
     int variableIndex;
     private Expression expression;
+
     public Node() {}
 
     public Node(int variableIndex, Node low, Node high, Expression expression) {
@@ -51,7 +52,10 @@ public class Node {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Node node = (Node) o;
-        return variableIndex == node.variableIndex && Objects.equals(low, node.low) && Objects.equals(high, node.high);
+        return variableIndex == node.variableIndex
+                && Objects.equals(low, node.low)
+                && Objects.equals(high, node.high)
+                && expression.equals(node.expression);
     }
 
     @Override

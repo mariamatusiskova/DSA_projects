@@ -45,6 +45,11 @@ public class Or extends LogicFunction {
         return allChildrenAreNull ? null : false;
     }
 
+    @Override
+    public String toString() {
+        return String.join("+", children.stream().map(ch -> ch.toString()).toList());
+    }
+
     public List<Expression> replace(String variable, HashMap<String, Boolean> values, Boolean bool) {
 
         List<Expression> newChildren = new ArrayList<>();

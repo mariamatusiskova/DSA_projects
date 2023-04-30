@@ -52,6 +52,10 @@ public class And extends LogicFunction {
 
     public Expression reduce(HashMap<String, Boolean> values) {
 
+        if(children.size() == 1){
+            return this;
+        }
+
         List<Expression> newChildren = new ArrayList<>();
 
         for (Expression child: children) {
@@ -63,8 +67,13 @@ public class And extends LogicFunction {
             }
         }
 
-        Expression combinedExpression =  new And(newChildren);
+        Expression combinedExpression = new And(newChildren);
 
         return combinedExpression;
+    }
+
+    @Override
+    public String toString() {
+        return String.join(".", children.stream().map(ch -> ch.toString()).toList());
     }
 }

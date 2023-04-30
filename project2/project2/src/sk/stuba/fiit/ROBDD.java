@@ -39,7 +39,6 @@ public class ROBDD {
 
     // BUILD
     public Node BDD_create(String bfunction, String order) {
-        // TODO: vrat strom a v tejto fukcii potom jeho root
         root = new Node(0, null, null, new Or(bfunction));
         BDD_create_helper(root, new Or(bfunction), order, 0);
         return root;
@@ -56,12 +55,23 @@ public class ROBDD {
             Boolean value = or.evaluate(values);
 
             if (value != null && value == false) {
-                node.setLow(new Node(0, null, null, new Variable(false)));
+                node.setLow(new LeafNode(false));
             } else {
-                node.setHigh(new Node(0, null, null, new Variable(true)));
+                node.setHigh(new LeafNode(true));
             }
 
         } else {
+
+//            Or orZero = new Or(or.getChildren());
+//            orZero.replace(order.charAt(variableIndex) + "", values, false);
+//
+//            Or orOne = new Or(or.getChildren());
+//            orOne.replace(order.charAt(variableIndex) + "", values, true);
+//
+//            Node nodeZero = BDD_create_helper(orZero, order, variableIndex + 1);
+//            Node nodeOne = BDD_create_helper(orOne, order, variableIndex + 1);
+//
+//            return checkReductionBDD(new Node(variableIndex, nodeZero, nodeOne, or), storeTable, reductionTable);
 
             Or orZero = new Or(or.getChildren());
             List<Expression> exprZero = orZero.replace(order.charAt(variableIndex) + "", values, false);
@@ -78,10 +88,10 @@ public class ROBDD {
             node.setLow(nodeZero);
             node.setHigh(nodeOne);
 
-            checkReductionBDD(new Node(variableIndex, nodeZero, nodeOne, or), storeTable, reductionTable);
-
             BDD_create_helper(nodeZero, orZero, order, variableIndex + 1);
             BDD_create_helper(nodeOne, orOne, order, variableIndex + 1);
+
+            checkReductionBDD(node, storeTable, reductionTable);
         }
     }
 
@@ -99,7 +109,7 @@ public class ROBDD {
 
         int indexOfNode;
 
-        if (node.getLow() == node.getHigh()) {
+        if (node.getLow().equals(node.getHigh())) {
             return node.getLow();
         } else if (reductionTable.check(node)) {
             indexOfNode = reductionTable.search(node);
@@ -108,7 +118,7 @@ public class ROBDD {
             Node newNode = storeTable.insert(node);
             indexOfNode = storeTable.getSize() - 1;
             reductionTable.insert(indexOfNode, newNode);
-            return node;
+            return newNode;
         }
     }
 

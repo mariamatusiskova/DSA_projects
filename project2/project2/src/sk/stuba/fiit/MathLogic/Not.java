@@ -36,4 +36,9 @@ public class Not extends Expression {
         this.child = child;
     }
 
+    @Override
+    public String toString() {
+        return "!(" + child.toString() + ")";
+    }
+
 }
