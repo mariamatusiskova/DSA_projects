@@ -39,15 +39,14 @@ public class ROBDD {
 
     // BUILD
     public Node BDD_create(String bfunction, String order) {
-        root = new Node(0, null, null, new Or(bfunction));
-        BDD_create_helper(root, new Or(bfunction), order, 0);
+        root = BDD_create_helper(new Or(bfunction), order, 0);
         return root;
     }
 
-    private void BDD_create_helper(Node node, Or or, String order, int variableIndex) {
+    private Node BDD_create_helper(Or or, String order, int variableIndex) {
 
         if (order.isEmpty()) {
-            return;
+            return null;
         }
 
         if (variableIndex > this.numberOfVariables-1) {
@@ -55,23 +54,12 @@ public class ROBDD {
             Boolean value = or.evaluate(values);
 
             if (value != null && value == false) {
-                node.setLow(new LeafNode(false));
+                return new LeafNode(false);
             } else {
-                node.setHigh(new LeafNode(true));
+                return new LeafNode(true);
             }
 
         } else {
-
-//            Or orZero = new Or(or.getChildren());
-//            orZero.replace(order.charAt(variableIndex) + "", values, false);
-//
-//            Or orOne = new Or(or.getChildren());
-//            orOne.replace(order.charAt(variableIndex) + "", values, true);
-//
-//            Node nodeZero = BDD_create_helper(orZero, order, variableIndex + 1);
-//            Node nodeOne = BDD_create_helper(orOne, order, variableIndex + 1);
-//
-//            return checkReductionBDD(new Node(variableIndex, nodeZero, nodeOne, or), storeTable, reductionTable);
 
             Or orZero = new Or(or.getChildren());
             List<Expression> exprZero = orZero.replace(order.charAt(variableIndex) + "", values, false);
@@ -82,16 +70,10 @@ public class ROBDD {
             orZero.setChildren(exprZero);
             orOne.setChildren(exprOne);
 
-            Node nodeZero = new Node(variableIndex+1, null, null, orZero);
-            Node nodeOne = new Node(variableIndex+1, null, null, orOne);
+            Node nodeZero = BDD_create_helper(orZero, order, variableIndex + 1);
+            Node nodeOne = BDD_create_helper(orOne, order, variableIndex + 1);
 
-            node.setLow(nodeZero);
-            node.setHigh(nodeOne);
-
-            BDD_create_helper(nodeZero, orZero, order, variableIndex + 1);
-            BDD_create_helper(nodeOne, orOne, order, variableIndex + 1);
-
-            checkReductionBDD(node, storeTable, reductionTable);
+            return checkReductionBDD(new Node(variableIndex, nodeZero, nodeOne, or), storeTable, reductionTable);
         }
     }
 

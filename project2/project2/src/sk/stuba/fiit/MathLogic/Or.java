@@ -63,13 +63,16 @@ public class Or extends LogicFunction {
             }
         }
 
-        for (int i = 0; i < newChildren.size(); i++) {
-            And and = (And) newChildren.get(i);
-            newChildren.set(i, and.reduce(values));
-        }
+        reduceAnds(newChildren, values);
 
         values.put(variable, null);
         return newChildren;
     }
 
+    private void reduceAnds(List<Expression> ands, HashMap<String, Boolean> values){
+        for (int i = 0; i < ands.size(); i++) {
+            And and = (And) ands.get(i);
+            ands.set(i, and.reduce(values));
+        }
+    }
 }
