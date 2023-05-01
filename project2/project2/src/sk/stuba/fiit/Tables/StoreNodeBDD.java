@@ -1,5 +1,6 @@
 package sk.stuba.fiit.Tables;
 
+import sk.stuba.fiit.LeafNode;
 import sk.stuba.fiit.MathLogic.Expression;
 import sk.stuba.fiit.Node;
 
@@ -10,11 +11,11 @@ public class StoreNodeBDD {
 
     Map<Integer, Node> table;
 
-    public StoreNodeBDD(Node node) {
+    public StoreNodeBDD() {
         table = new HashMap<>();
         // initialization of table with terminal nodes 0 and 1
-        table.put(0, node);
-        table.put(1, node);
+        table.put(0,  new LeafNode(false));
+        table.put(1, new LeafNode(true));
     }
 
     public Node insert(Node node) {

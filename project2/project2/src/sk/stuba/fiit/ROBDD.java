@@ -33,7 +33,7 @@ public class ROBDD {
     public ROBDD(String bfunction) {
         this.bfunction = bfunction;
         this.numberOfVariables = countAndStoreVariables(bfunction);
-        this.storeTable = new StoreNodeBDD(new Node(numberOfVariables-1, null, null, null));
+        this.storeTable = new StoreNodeBDD();
         this.reductionTable = new ReductionTableBDD();
     }
 
@@ -54,9 +54,9 @@ public class ROBDD {
             Boolean value = or.evaluate(values);
 
             if (value != null && value == false) {
-                return new LeafNode(false);
+                return storeTable.search(0);
             } else {
-                return new LeafNode(true);
+                return storeTable.search(1);
             }
 
         } else {
@@ -88,6 +88,8 @@ public class ROBDD {
     }
 
     private Node checkReductionBDD(Node node, StoreNodeBDD storeTable, ReductionTableBDD reductionTable) {
+
+        // TODO: akk if LeafNode does exist, if yes connect, if not continue
 
         int indexOfNode;
 
@@ -137,8 +139,6 @@ public class ROBDD {
                 System.out.println("best order: " + order);
             }
         }
-
-        System.out.println(finalBDD.root.getVariableIndex());
 
         return finalBDD.root;
     }

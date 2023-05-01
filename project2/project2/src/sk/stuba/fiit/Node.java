@@ -52,6 +52,7 @@ public class Node {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Node node = (Node) o;
+
         return variableIndex == node.variableIndex
                 && Objects.equals(low, node.low)
                 && Objects.equals(high, node.high)

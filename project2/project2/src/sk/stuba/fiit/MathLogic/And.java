@@ -71,8 +71,4 @@ public class And extends LogicFunction {
     public String toString() {
         return String.join(".", children.stream().map(ch -> ch.toString()).toList());
     }
-
-    public boolean isEmpty(){
-        return children.isEmpty();
-    }
 }
