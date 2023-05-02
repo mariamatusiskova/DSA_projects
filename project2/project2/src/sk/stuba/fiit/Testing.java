@@ -11,9 +11,6 @@ public class Testing {
 //        ROBDD robdd = new ROBDD("A.!C + A.B.C + !A.B + !B.C");
 //        robdd.BDD_create_with_best_order("A.!C + A.B.C + !A.B + !B.C");
 
-
-        // x1 = A, x2 = B, x3 = C, x4 = D, x5 = E, x6 = F, x7 = G, x8 = H
-
         ROBDD robdd = new ROBDD("A.B + C.D + E.F + G.H");
         robdd.BDD_create_with_best_order("A.B + C.D + E.F + G.H");
 
