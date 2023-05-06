@@ -14,4 +14,12 @@ public class LeafNode extends Node {
         LeafNode node = (LeafNode) o;
         return this.value == node.value;
     }
+
+    public boolean getValue() {
+        return value;
+    }
+
+    public void setValue(boolean value) {
+        this.value = value;
+    }
 }

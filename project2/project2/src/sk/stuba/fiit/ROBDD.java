@@ -89,8 +89,6 @@ public class ROBDD {
 
     private Node checkReductionBDD(Node node, StoreNodeBDD storeTable, ReductionTableBDD reductionTable) {
 
-        // TODO: akk if LeafNode does exist, if yes connect, if not continue
-
         int indexOfNode;
 
         if (node.getLow().equals(node.getHigh())) {
@@ -111,7 +109,6 @@ public class ROBDD {
 
         // linear ordering
 
-        // TODO: check this condition
         if (variables.isEmpty()) {
             return null;
         }
@@ -130,7 +127,7 @@ public class ROBDD {
             currentBdd.BDD_create(bfunction, order);
             System.out.println(order);
 
-            int countNodes = currentBdd.storeTable.countNodes();
+            int countNodes = currentBdd.storeTable.getSize();
             System.out.println("no of nodes: " + countNodes);
 
             if (countNodes < finalNodes) {
@@ -154,14 +151,29 @@ public class ROBDD {
         return sb.toString();
     }
 
-    private String generateOrder() {
-        return null;
-    }
-
     // USE
-    public char BDD_use(ROBDD bdd, String inputs) {
+    public String BDD_use(Node node, String inputs) {
 
-        return 'a';
+        if (inputs.isEmpty()) {
+            return "-1";
+        }
+
+        for (int i = 0; i < inputs.length(); i++) {
+
+            if (inputs.charAt(i) == '0' && node != null) {
+                node = node.getLow();
+            } else if (inputs.charAt(i) == '1' && node != null) {
+                node = node.getHigh();
+            } else {
+                return "-1";
+            }
+
+            if (node instanceof LeafNode) {
+                return ((LeafNode) node).getValue() ? "1" : "0";
+            }
+        }
+
+        return "-1";
     }
 
 }
