@@ -1,12 +1,12 @@
+// Source: https://www3.cs.stonybrook.edu/~cram/cse505/Fall20/Resources/bdd97.pdf
+
 package sk.stuba.fiit;// sk.stuba.fiit.ROBDD - Reduced ordered binary decision diagram
 
 import sk.stuba.fiit.MathLogic.Expression;
 import sk.stuba.fiit.MathLogic.Or;
-import sk.stuba.fiit.MathLogic.Variable;
 import sk.stuba.fiit.Tables.ReductionTableBDD;
 import sk.stuba.fiit.Tables.StoreNodeBDD;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
