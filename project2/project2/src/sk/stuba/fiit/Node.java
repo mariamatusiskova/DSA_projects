@@ -2,6 +2,7 @@ package sk.stuba.fiit;
 
 import sk.stuba.fiit.MathLogic.Expression;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 public class Node {
@@ -12,6 +13,8 @@ public class Node {
     private Node high;
     int variableIndex;
     private Expression expression;
+    public String order;
+    public HashMap<String, Boolean> values = new HashMap<>();
 
     public Node() {}
 

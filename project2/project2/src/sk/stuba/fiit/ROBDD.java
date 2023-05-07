@@ -39,11 +39,12 @@ public class ROBDD {
 
     // BUILD
     public Node BDD_create(String bfunction, String order) {
-        root = BDD_create_helper(new Or(bfunction), order, 0);
+        root = BDD_create_helper(new Or(bfunction), order, 0, values);
+        root.order = order;
         return root;
     }
 
-    private Node BDD_create_helper(Or or, String order, int variableIndex) {
+    private Node BDD_create_helper(Or or, String order, int variableIndex, HashMap<String, Boolean> values) {
 
         if (order.isEmpty()) {
             return null;
@@ -61,9 +62,11 @@ public class ROBDD {
 
         } else {
 
+            HashMap<String, Boolean> valuesZero = new HashMap<>();
             Or orZero = new Or(or.getChildren());
             List<Expression> exprZero = orZero.replace(order.charAt(variableIndex) + "", values, false);
 
+            HashMap<String, Boolean> valuesOne = new HashMap<>();
             Or orOne = new Or(or.getChildren());
             List<Expression> exprOne = orOne.replace(order.charAt(variableIndex) + "", values, true);
 
@@ -160,9 +163,9 @@ public class ROBDD {
 
         for (int i = 0; i < inputs.length(); i++) {
 
-            if (inputs.charAt(i) == '0' && node != null) {
+            if (node != null && inputs.charAt(i) == '0') {
                 node = node.getLow();
-            } else if (inputs.charAt(i) == '1' && node != null) {
+            } else if (node != null && inputs.charAt(i) == '1') {
                 node = node.getHigh();
             } else {
                 return "-1";

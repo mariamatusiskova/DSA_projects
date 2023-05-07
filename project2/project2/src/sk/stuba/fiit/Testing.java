@@ -1,12 +1,16 @@
 package sk.stuba.fiit;
 
+import sk.stuba.fiit.MathLogic.Expression;
+import sk.stuba.fiit.MathLogic.Or;
+
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 
 public class Testing {
+
+    HashSet<Character> variables = new HashSet<>();
+    public HashMap<String, Boolean> values = new HashMap<>();
+
 
     // generate random boolean functions
 
@@ -143,6 +147,52 @@ public class Testing {
         return sb.toString();
     }
 
+    // the truth table for comparing result with the function BDD_use
+    public String truthTable(String bfunction, String inputs, String order) {
+
+        if (bfunction.isEmpty()) {
+            return "-1";
+        }
+
+        if (inputs.isEmpty()) {
+            return "-1";
+        }
+
+        storeVariables(bfunction);
+        Or or = new Or(bfunction);
+        Or booleanExpression = new Or(or.getChildren());
+
+        for (int i = 0; i < inputs.length(); i++) {
+
+            if (inputs.charAt(i) == '1') {
+                values.put(order.charAt(i) + "", true);
+            } else if (inputs.charAt(i) == '0') {
+                values.put(order.charAt(i) + "", false);
+            } else {
+                return "-1";
+            }
+        }
+
+        Boolean value = booleanExpression.evaluate(values);
+
+        if (value != null && value == false) {
+            return "0";
+        } else if (value != null && value == true) {
+            return "1";
+        }
+
+        return "-1";
+    }
+
+    private void storeVariables(String bfunction) {
+        for (char c : bfunction.toCharArray()) {
+            if (Character.isLetter(c)) {
+                variables.add(c);
+                values.put(c + "", null);
+            }
+        }
+    }
+
     public static void main(String[] args) throws IOException {
 
         final int MAX_BOOLEAN_FUNCTIONS = 100;
@@ -157,10 +207,14 @@ public class Testing {
             String minFormula = testing.generateBooleanFunction(numVariables[0]);
             String minBits = testing.generateBinaryCombinations(numVariables[0]);
 
+            System.out.println("biiiits: " + minBits);
+
             ROBDD minRobdd = new ROBDD(minFormula);
             Node minRoot = minRobdd.BDD_create_with_best_order(minFormula);
 
             String minResult = minRobdd.BDD_use(minRoot, minBits);
+            String compareResult = testing.truthTable(minFormula, minBits, minRoot.order);
+            System.out.println("reeesult: " + compareResult);
             System.out.println("Min result: " + minResult  + "\n");
         }
 
