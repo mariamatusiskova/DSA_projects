@@ -7,6 +7,7 @@ import sk.stuba.fiit.MathLogic.Or;
 import sk.stuba.fiit.Tables.ReductionTableBDD;
 import sk.stuba.fiit.Tables.StoreNodeBDD;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -25,6 +26,7 @@ public class ROBDD {
 
     public HashMap<String, Boolean> values = new HashMap<>();
     private Node root;
+    private int beforeReduction = 0;
 
     public ROBDD(Node root) {
         this.root = root;
@@ -39,12 +41,14 @@ public class ROBDD {
 
     // BUILD
     public Node BDD_create(String bfunction, String order) {
-        root = BDD_create_helper(new Or(bfunction), order, 0, values);
+        Or or = new Or(bfunction);
+        or.setValues(values);
+        root = BDD_create_helper(or, order, 0);
         root.order = order;
         return root;
     }
 
-    private Node BDD_create_helper(Or or, String order, int variableIndex, HashMap<String, Boolean> values) {
+    private Node BDD_create_helper(Or or, String order, int variableIndex) {
 
         if (order.isEmpty()) {
             return null;
@@ -52,7 +56,7 @@ public class ROBDD {
 
         if (variableIndex > this.numberOfVariables-1) {
 
-            Boolean value = or.evaluate(values);
+            Boolean value = or.evaluate();
 
             if (value != null && value == false) {
                 return storeTable.search(0);
@@ -62,13 +66,17 @@ public class ROBDD {
 
         } else {
 
-            HashMap<String, Boolean> valuesZero = new HashMap<>();
+            HashMap<String, Boolean> valuesZero = new HashMap<>(or.getValues());
+            valuesZero.put(order.charAt(variableIndex) + "", false);
             Or orZero = new Or(or.getChildren());
-            List<Expression> exprZero = orZero.replace(order.charAt(variableIndex) + "", values, false);
+            orZero.setValues(valuesZero);
+            List<Expression> exprZero = orZero.replace();
 
-            HashMap<String, Boolean> valuesOne = new HashMap<>();
+            HashMap<String, Boolean> valuesOne = new HashMap<>(or.getValues());
+            valuesOne.put(order.charAt(variableIndex) + "", true);
             Or orOne = new Or(or.getChildren());
-            List<Expression> exprOne = orOne.replace(order.charAt(variableIndex) + "", values, true);
+            orOne.setValues(valuesOne);
+            List<Expression> exprOne = orOne.replace();
 
             orZero.setChildren(exprZero);
             orOne.setChildren(exprOne);
@@ -95,9 +103,11 @@ public class ROBDD {
         int indexOfNode;
 
         if (node.getLow().equals(node.getHigh())) {
+            beforeReduction++;
             return node.getLow();
         } else if (reductionTable.check(node)) {
             indexOfNode = reductionTable.search(node);
+            beforeReduction++;
             return storeTable.search(indexOfNode);
         } else {
             Node newNode = storeTable.insert(node);
@@ -130,8 +140,15 @@ public class ROBDD {
             currentBdd.BDD_create(bfunction, order);
             System.out.println(order);
 
+            // plus root
             int countNodes = currentBdd.storeTable.getSize();
-            System.out.println("no of nodes: " + countNodes);
+            System.out.println("no of nodes before reduction: " + currentBdd.beforeReduction + countNodes);
+            System.out.println("no of nodes after reduction: " + countNodes);
+
+            final DecimalFormat df = new DecimalFormat("0.00");
+            double percentage = (double) countNodes/currentBdd.beforeReduction * 100;
+            double reductionPercentage = 100 - percentage;
+            System.out.println("percentage reduction rate: " + df.format(reductionPercentage) + "%");
 
             if (countNodes < finalNodes) {
                 finalNodes = countNodes;
@@ -163,12 +180,14 @@ public class ROBDD {
 
         for (int i = 0; i < inputs.length(); i++) {
 
-            if (node != null && inputs.charAt(i) == '0') {
-                node = node.getLow();
-            } else if (node != null && inputs.charAt(i) == '1') {
-                node = node.getHigh();
-            } else {
+            if (node == null) {
                 return "-1";
+            }
+
+            if (inputs.charAt(i) == '0') {
+                node = node.getLow();
+            } else if (inputs.charAt(i) == '1') {
+                node = node.getHigh();
             }
 
             if (node instanceof LeafNode) {

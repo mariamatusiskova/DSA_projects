@@ -1,8 +1,6 @@
 package sk.stuba.fiit.MathLogic;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class Or extends LogicFunction {
 
@@ -24,7 +22,7 @@ public class Or extends LogicFunction {
     }
 
     @Override
-    public Boolean evaluate(HashMap<String, Boolean> values) {
+    public Boolean evaluate() {
 
         boolean allChildrenAreNull = true;
 
@@ -33,7 +31,8 @@ public class Or extends LogicFunction {
         }
 
         for (Expression child: children) {
-            Boolean value = child.evaluate(values);
+            child.setValues(values);
+            Boolean value = child.evaluate();
             if (value != null) {
                 if (value) {
                     return true;
@@ -50,29 +49,26 @@ public class Or extends LogicFunction {
         return String.join("+", children.stream().map(ch -> ch.toString()).toList());
     }
 
-    public List<Expression> replace(String variable, HashMap<String, Boolean> values, Boolean bool) {
+    public List<Expression> replace() {
 
         List<Expression> newChildren = new ArrayList<>();
 
-        values.put(variable, bool);
-
         for (Expression child: children) {
-            Boolean value = child.evaluate(values);
+            child.setValues(values);
+            Boolean value = child.evaluate();
             if (value == null || value) {
                 newChildren.add(child);
             }
         }
 
-        reduceAnds(newChildren, values);
-
-        values.put(variable, null);
+        reduceAnds(newChildren);
         return newChildren;
     }
 
-    private void reduceAnds(List<Expression> ands, HashMap<String, Boolean> values){
+    private void reduceAnds(List<Expression> ands){
         for (int i = 0; i < ands.size(); i++) {
             And and = (And) ands.get(i);
-            ands.set(i, and.reduce(values));
+            ands.set(i, and.reduce());
         }
     }
 }

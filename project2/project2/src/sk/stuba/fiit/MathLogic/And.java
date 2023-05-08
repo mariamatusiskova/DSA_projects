@@ -28,7 +28,7 @@ public class And extends LogicFunction {
     }
 
     @Override
-    public Boolean evaluate(HashMap<String, Boolean> values) {
+    public Boolean evaluate() {
         boolean allChildrenAreNull = true;
 
         if (children.isEmpty()) {
@@ -37,7 +37,8 @@ public class And extends LogicFunction {
 
         for (Expression child: children) {
 
-            Boolean value = child.evaluate(values);
+            child.setValues(values);
+            Boolean value = child.evaluate();
 
             if (value != null) {
                 if (!value) {
@@ -50,13 +51,13 @@ public class And extends LogicFunction {
         return allChildrenAreNull ? null : true;
     }
 
-    public Expression reduce(HashMap<String, Boolean> values) {
+    public Expression reduce() {
         List<Expression> newChildren = new ArrayList<>();
 
         for (Expression child: children) {
 
             // reduce true variables
-            Boolean value = child.evaluate(values);
+            Boolean value = child.evaluate();
             if (value == null || value == false) {
                 newChildren.add(child);
             }

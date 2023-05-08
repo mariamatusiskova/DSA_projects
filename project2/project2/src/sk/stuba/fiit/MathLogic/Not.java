@@ -17,9 +17,11 @@ public class Not extends Expression {
     }
 
     @Override
-    public Boolean evaluate(HashMap<String, Boolean> values) {
+    public Boolean evaluate() {
 
-        Boolean value = child.evaluate(values);
+        child.setValues(values);
+
+        Boolean value = child.evaluate();
 
         if (value != null) {
             return !value;

@@ -9,6 +9,8 @@ public class Variable extends Expression {
 
     public Variable(String input) { parseInput(input); }
 
+    public Variable() {}
+
     public Variable(boolean lastNodeValue) {
         this.lastNodeValue = lastNodeValue;
     }
@@ -19,7 +21,7 @@ public class Variable extends Expression {
     }
 
     @Override
-    public Boolean evaluate(HashMap<String, Boolean> values) {
+    public Boolean evaluate() {
 
         if (lastNodeValue != null) {
             return lastNodeValue;

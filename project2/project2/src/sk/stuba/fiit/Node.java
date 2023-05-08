@@ -14,7 +14,6 @@ public class Node {
     int variableIndex;
     private Expression expression;
     public String order;
-    public HashMap<String, Boolean> values = new HashMap<>();
 
     public Node() {}
 

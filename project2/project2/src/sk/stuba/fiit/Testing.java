@@ -147,20 +147,57 @@ public class Testing {
         return sb.toString();
     }
 
+      //  List<Expression> expression;
+
+//        for (int i = 0; i < inputs.length(); i++) {
+//
+//            expression = booleanExpression.getChildren();
+//
+//            if (i == inputs.length() - 1) {
+//
+//                Boolean value = booleanExpression.evaluate();
+//
+//                if (value != null && value == false) {
+//                    return "0";
+//                } else if (value != null && value == true) {
+//                    return "1";
+//                } else {
+//                    return "-1";
+//                }
+//            } else {
+//
+//                if (inputs.charAt(i) == '1') {
+//                  //  values.put(order.charAt(i) + "", true);
+//                    expression = booleanExpression.replace(order.charAt(i) + "", true);
+//                } else if (inputs.charAt(i) == '0') {
+//                  //  values.put(order.charAt(i) + "", false);
+//                    expression = booleanExpression.replace(order.charAt(i) + "", false);
+//                } else {
+//                    return "-1";
+//                }
+//            }
+//
+//            booleanExpression.setChildren(expression);
+//
+////            if (i != inputs.length()-1) {
+////                values.remove(order.charAt(i) + "");
+////            }
+//        }
+//
+//        return "-1";
+//    }
+
+    /// *******
+
     // the truth table for comparing result with the function BDD_use
     public String truthTable(String bfunction, String inputs, String order) {
 
-        if (bfunction.isEmpty()) {
-            return "-1";
-        }
-
-        if (inputs.isEmpty()) {
+        if (bfunction.isEmpty() || inputs.isEmpty()) {
             return "-1";
         }
 
         storeVariables(bfunction);
         Or or = new Or(bfunction);
-        Or booleanExpression = new Or(or.getChildren());
 
         for (int i = 0; i < inputs.length(); i++) {
 
@@ -173,7 +210,9 @@ public class Testing {
             }
         }
 
-        Boolean value = booleanExpression.evaluate(values);
+        or.setValues(values);
+
+        Boolean value = or.evaluate();
 
         if (value != null && value == false) {
             return "0";
@@ -200,6 +239,13 @@ public class Testing {
 
         Testing testing = new Testing();
 
+//        ROBDD robdd = new ROBDD("A.B + A.C + B.C");
+//        Node root = robdd.BDD_create_with_best_order("A.B + A.C + B.C");
+//        String result = robdd.BDD_use(root, "100");
+//        String compareResult = testing.truthTable("A.B + A.C + B.C", "100", root.order);
+//        System.out.println(result);
+//        System.out.println("reeesult: " + compareResult  + "\n");
+
         // min
         System.out.println("BDDs with 13 variables");
 
@@ -207,6 +253,7 @@ public class Testing {
             String minFormula = testing.generateBooleanFunction(numVariables[0]);
             String minBits = testing.generateBinaryCombinations(numVariables[0]);
 
+            System.out.println("#### inputminFormula " + minFormula);
             System.out.println("biiiits: " + minBits);
 
             ROBDD minRobdd = new ROBDD(minFormula);
@@ -214,8 +261,9 @@ public class Testing {
 
             String minResult = minRobdd.BDD_use(minRoot, minBits);
             String compareResult = testing.truthTable(minFormula, minBits, minRoot.order);
-            System.out.println("reeesult: " + compareResult);
-            System.out.println("Min result: " + minResult  + "\n");
+            System.out.println("Min result: " + minResult);
+            System.out.println("reeesult: " + compareResult  + "\n");
+
         }
 
 //        // max
