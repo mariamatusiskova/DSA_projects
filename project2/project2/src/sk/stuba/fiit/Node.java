@@ -15,6 +15,9 @@ public class Node {
     private Expression expression;
     public String order;
 
+    // testing
+    public double reductionPercentage;
+
     public Node() {}
 
     public Node(int variableIndex, Node low, Node high, Expression expression) {

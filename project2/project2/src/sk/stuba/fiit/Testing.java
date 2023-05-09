@@ -4,7 +4,9 @@ import sk.stuba.fiit.MathLogic.Expression;
 import sk.stuba.fiit.MathLogic.Or;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.*;
+import java.util.stream.DoubleStream;
 
 public class Testing {
 
@@ -147,48 +149,6 @@ public class Testing {
         return sb.toString();
     }
 
-      //  List<Expression> expression;
-
-//        for (int i = 0; i < inputs.length(); i++) {
-//
-//            expression = booleanExpression.getChildren();
-//
-//            if (i == inputs.length() - 1) {
-//
-//                Boolean value = booleanExpression.evaluate();
-//
-//                if (value != null && value == false) {
-//                    return "0";
-//                } else if (value != null && value == true) {
-//                    return "1";
-//                } else {
-//                    return "-1";
-//                }
-//            } else {
-//
-//                if (inputs.charAt(i) == '1') {
-//                  //  values.put(order.charAt(i) + "", true);
-//                    expression = booleanExpression.replace(order.charAt(i) + "", true);
-//                } else if (inputs.charAt(i) == '0') {
-//                  //  values.put(order.charAt(i) + "", false);
-//                    expression = booleanExpression.replace(order.charAt(i) + "", false);
-//                } else {
-//                    return "-1";
-//                }
-//            }
-//
-//            booleanExpression.setChildren(expression);
-//
-////            if (i != inputs.length()-1) {
-////                values.remove(order.charAt(i) + "");
-////            }
-//        }
-//
-//        return "-1";
-//    }
-
-    /// *******
-
     // the truth table for comparing result with the function BDD_use
     public String truthTable(String bfunction, String inputs, String order) {
 
@@ -239,34 +199,72 @@ public class Testing {
 
         Testing testing = new Testing();
 
+        double[] reductionPercentage = new double[100];
+        long totalTime_BDD_create_with_best_order = 0;
+        long totalTime_BDD_create = 0;
+        long totalTime_BDD_use = 0;
+
+
 //        ROBDD robdd = new ROBDD("A.B + A.C + B.C");
 //        Node root = robdd.BDD_create_with_best_order("A.B + A.C + B.C");
 //        String result = robdd.BDD_use(root, "100");
 //        String compareResult = testing.truthTable("A.B + A.C + B.C", "100", root.order);
-//        System.out.println(result);
-//        System.out.println("reeesult: " + compareResult  + "\n");
+//        System.out.println("Result from BDD_use: " + result);
+//        System.out.println("result from the Truth Table: " + compareResult  + "\n");
 
-        // min
+//        // min
         System.out.println("BDDs with 13 variables");
 
         for (int i = 0; i < MAX_BOOLEAN_FUNCTIONS; i++) {
             String minFormula = testing.generateBooleanFunction(numVariables[0]);
             String minBits = testing.generateBinaryCombinations(numVariables[0]);
 
-            System.out.println("#### inputminFormula " + minFormula);
-            System.out.println("biiiits: " + minBits);
+            System.out.println("formula: " + minFormula);
+            System.out.println("bits: " + minBits);
 
             ROBDD minRobdd = new ROBDD(minFormula);
+
+            long start = System.nanoTime();
             Node minRoot = minRobdd.BDD_create_with_best_order(minFormula);
+            long durationTime = (System.nanoTime() - start);
+            totalTime_BDD_create_with_best_order += durationTime;
 
+            start = System.nanoTime();
+            minRobdd.BDD_create(minFormula, minRoot.order);
+            durationTime = (System.nanoTime() - start);
+            totalTime_BDD_create += durationTime;
+
+            start = System.nanoTime();
             String minResult = minRobdd.BDD_use(minRoot, minBits);
-            String compareResult = testing.truthTable(minFormula, minBits, minRoot.order);
-            System.out.println("Min result: " + minResult);
-            System.out.println("reeesult: " + compareResult  + "\n");
+            durationTime = (System.nanoTime() - start);
+            totalTime_BDD_use += durationTime;
 
+            String compareResult = testing.truthTable(minFormula, minBits, minRoot.order);
+            System.out.println("Result from BDD_use: " + minResult);
+            System.out.println("result from the Truth Table: " + compareResult  + "\n");
+
+            // for calculating average
+            reductionPercentage[i] = minRoot.reductionPercentage;
         }
 
+        // average of all BDD
+
+        double averageOfReductionPercentage = DoubleStream.of(reductionPercentage).average().getAsDouble();
+        DecimalFormat df = new DecimalFormat("0.00");
+
+        System.out.println("Average of the reduction percentage is: " + df.format(averageOfReductionPercentage));
+        System.out.println("Average of a time duration of BDD_create_with_best_order: " + totalTime_BDD_create_with_best_order/100 + " nanoseconds");
+        System.out.println("Average of a time duration of BDD_create: " + totalTime_BDD_create/100 + " nanoseconds");
+        System.out.println("Average of a time duration of BDD_use: " + totalTime_BDD_use/100 + " nanoseconds");
+
 //        // max
+//        System.out.println("BDDs with 20 variables");
+//
+//        double[] reductionPercentageMax = new double[100];
+//        totalTime_BDD_create_with_best_order = 0;
+//        totalTime_BDD_create = 0;
+//        totalTime_BDD_use = 0;
+//
 //        System.out.println("BDDs with 20 variables");
 //
 //        for (int i = 0; i < MAX_BOOLEAN_FUNCTIONS; i++) {
@@ -274,11 +272,38 @@ public class Testing {
 //            String maxBits = testing.generateBinaryCombinations(numVariables[1]);
 //
 //            ROBDD maxRobdd = new ROBDD(maxFormula);
-//            Node maxRoot = maxRobdd.BDD_create_with_best_order(maxFormula);
 //
+//            long start = System.nanoTime();
+//            Node maxRoot = maxRobdd.BDD_create_with_best_order(maxFormula);
+//            long durationTime = (System.nanoTime() - start);
+//            totalTime_BDD_create_with_best_order += durationTime;
+//
+//            start = System.nanoTime();
+//            maxRobdd.BDD_create(maxFormula, maxRoot.order);
+//            durationTime = (System.nanoTime() - start);
+//            totalTime_BDD_create += durationTime;
+//
+//            start = System.nanoTime();
 //            String maxResult = maxRobdd.BDD_use(maxRoot, maxBits);
-//            System.out.println("Min result: " + maxResult + "\n");
+//            durationTime = (System.nanoTime() - start);
+//            totalTime_BDD_use += durationTime;
+//
+//            // for calculating average
+//            reductionPercentageMax[i] = maxRoot.reductionPercentage;
+//
+//            String compareResult = testing.truthTable(maxFormula, maxBits, maxRoot.order);
+//            System.out.println("Result from BDD_use: " + maxResult);
+//            System.out.println("result from the Truth Table: " + compareResult  + "\n");
 //        }
+//
+//        double averageOfReductionPercentage = DoubleStream.of(reductionPercentageMax).average().getAsDouble();
+//        DecimalFormat df = new DecimalFormat("0.00");
+//
+//        System.out.println("Average of the reduction percentage is: " + df.format(averageOfReductionPercentage));
+//        System.out.println("Average of a time duration of BDD_create_with_best_order: " + totalTime_BDD_create_with_best_order/100 + " nanoseconds");
+//        System.out.println("Average of a time duration of BDD_create: " + totalTime_BDD_create/100 + " nanoseconds");
+//        System.out.println("Average of a time duration of BDD_use: " + totalTime_BDD_use/100 + " nanoseconds");
+
     }
 
 }

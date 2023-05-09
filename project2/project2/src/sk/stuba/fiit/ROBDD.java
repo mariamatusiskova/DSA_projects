@@ -142,17 +142,24 @@ public class ROBDD {
 
             // plus root
             int countNodes = currentBdd.storeTable.getSize();
-            System.out.println("no of nodes before reduction: " + currentBdd.beforeReduction + countNodes);
-            System.out.println("no of nodes after reduction: " + countNodes);
+            int totalNodesBeforeReduction = currentBdd.beforeReduction + countNodes;
+            System.out.println("num of nodes before reduction: " + totalNodesBeforeReduction);
+            System.out.println("num of nodes after reduction: " + countNodes);
 
             final DecimalFormat df = new DecimalFormat("0.00");
             double percentage = (double) countNodes/currentBdd.beforeReduction * 100;
             double reductionPercentage = 100 - percentage;
             System.out.println("percentage reduction rate: " + df.format(reductionPercentage) + "%");
 
+
+
             if (countNodes < finalNodes) {
+
                 finalNodes = countNodes;
                 finalBDD = currentBdd;
+
+                // testing
+                finalBDD.root.reductionPercentage = reductionPercentage;
                 System.out.println("best order: " + order);
             }
         }
