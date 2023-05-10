@@ -1,8 +1,7 @@
 package sk.stuba.fiit.Tables;
 
-import sk.stuba.fiit.LeafNode;
-import sk.stuba.fiit.MathLogic.Expression;
-import sk.stuba.fiit.Node;
+import sk.stuba.fiit.Tree.LeafNode;
+import sk.stuba.fiit.Tree.Node;
 
 import java.util.HashMap;
 import java.util.Map;

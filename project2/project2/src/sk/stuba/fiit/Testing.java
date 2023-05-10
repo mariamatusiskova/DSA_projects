@@ -1,7 +1,8 @@
 package sk.stuba.fiit;
 
-import sk.stuba.fiit.MathLogic.Expression;
 import sk.stuba.fiit.MathLogic.Or;
+import sk.stuba.fiit.Tree.Node;
+import sk.stuba.fiit.Tree.ROBDD;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -19,6 +20,10 @@ public class Testing {
     private Random random = new Random();
 
     public String generateBooleanFunction(int numVariables) {
+
+        if (numVariables <= 0) {
+            return null;
+        }
 
         String sequence = generateVariables(numVariables);
 
@@ -77,6 +82,10 @@ public class Testing {
 
     private int generateClauses(int numClauses) {
 
+        if (numClauses <= 0) {
+            return 0;
+        }
+
         int min = 1;
         int max = numClauses-1;
 
@@ -84,6 +93,10 @@ public class Testing {
     }
 
     private String generateRandomCombination(String variableSequence) {
+
+        if (variableSequence.isEmpty()) {
+            return null;
+        }
 
         StringBuilder sb = new StringBuilder();
 
@@ -229,6 +242,10 @@ public class Testing {
             long durationTime = (System.nanoTime() - start);
             totalTime_BDD_create_with_best_order += durationTime;
 
+            if (minRoot == null) {
+                return;
+            }
+
             start = System.nanoTime();
             minRobdd.BDD_create(minFormula, minRoot.order);
             durationTime = (System.nanoTime() - start);
@@ -252,7 +269,7 @@ public class Testing {
         double averageOfReductionPercentage = DoubleStream.of(reductionPercentage).average().getAsDouble();
         DecimalFormat df = new DecimalFormat("0.00");
 
-        System.out.println("Average of the reduction percentage is: " + df.format(averageOfReductionPercentage));
+        System.out.println("Average of the reduction percentage is: " + df.format(averageOfReductionPercentage) + "%");
         System.out.println("Average of a time duration of BDD_create_with_best_order: " + totalTime_BDD_create_with_best_order/100 + " nanoseconds");
         System.out.println("Average of a time duration of BDD_create: " + totalTime_BDD_create/100 + " nanoseconds");
         System.out.println("Average of a time duration of BDD_use: " + totalTime_BDD_use/100 + " nanoseconds");

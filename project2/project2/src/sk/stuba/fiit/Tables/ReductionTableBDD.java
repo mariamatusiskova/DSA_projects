@@ -1,6 +1,6 @@
 package sk.stuba.fiit.Tables;
 
-import sk.stuba.fiit.Node;
+import sk.stuba.fiit.Tree.Node;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +28,6 @@ public class ReductionTableBDD {
         table.put(key, indexOfNode);
     }
 
-    // TODO
     public int countNodes() {
         return table.size();
     }
